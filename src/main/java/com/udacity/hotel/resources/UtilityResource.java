@@ -1,0 +1,133 @@
+package com.udacity.hotel.resources;
+
+
+import java.util.*;
+import java.util.regex.*;
+
+import com.udacity.hotel.models.*;
+import com.udacity.hotel.services.*;
+
+
+public class UtilityResource
+{
+	public static boolean isRoomNumValid(String rmNum)
+		{
+			String rmRegX = "^\\w{1}\\d+$";
+			Pattern pattern = Pattern.compile(rmRegX);
+			
+			if( pattern.matcher(rmNum).matches() )
+				return true;
+			else
+			{
+				rmRegX = "^\\d+\\w{1}$";
+				pattern = Pattern.compile(rmRegX);
+				
+				return pattern.matcher(rmNum).matches();
+			}
+		}
+		
+		public static boolean isEmailValid(String email)
+		{ 
+			String eRegX = "^(\\w+)@(\\w+)\\.(\\w+)$"; // name@domain.com
+			Pattern pattern = Pattern.compile(eRegX);
+
+			if( pattern.matcher(email).matches() )
+				return true;
+			else
+			{
+				eRegX = "^(\\w+)@(\\w+)\\.(\\w+)\\.(\\w+)$"; // name@domain.com.uk
+				pattern = Pattern.compile(eRegX);
+				
+				return pattern.matcher(email).matches();
+			}
+		}
+		
+		static boolean isLeapYear(int year)
+		{
+			if( (year % 4) == 0 )
+			{
+			 	if( (year % 100) == 0 )
+				{
+					if( (year % 400) == 0 )
+						return true;
+					else
+						return false;
+				}
+				else
+					return true;
+			}
+			else
+				return false;
+		}
+		
+			// create a date instance with user entered data
+		public static Date getDateInstance(String date, int hour) 
+		{ 
+			// first check to see if date was entered in the correct format, if not throw an exception
+			
+			String dateRegX = "^(\\d{2})/(\\d{2})/(\\d{4})$";
+			Pattern pattern = Pattern.compile(dateRegX);
+			boolean match = pattern.matcher(date).matches();
+			
+			if (match)
+			{
+				String[] MDY = date.split("/");
+				
+				int month = Integer.parseInt( MDY[0] ) - 1;
+				
+				if( (month < 0) || (month > 11) )
+					throw new IllegalArgumentException("Month Out Of Range!!");
+				
+				int day = Integer.parseInt( MDY[1] );
+				
+				int year = Integer.parseInt( MDY[2] );
+				
+					// check for leap year, if so then february can have at most 29 days
+				if (month == 1)
+				{
+					if( isLeapYear(year) )
+					{
+						if( (day < 1) || (day > 29) )
+							throw new IllegalArgumentException("Date Out Of Range!!");
+					}
+					else
+					{
+						if( (day < 1) || (day > 28) )
+							throw new IllegalArgumentException("Date Out Of Range!!");
+					}
+				}
+				else
+				{
+					if( (month == 8) || (month == 3) || (month == 5) || (month == 10) )
+					{
+						if( (day < 1) || (day > 30) )
+							throw new IllegalArgumentException("Date Out Of Range!!");
+					}
+					else
+					{
+						if( (day < 1) || (day > 31) )
+							throw new IllegalArgumentException("Date Out Of Range!!");
+					}
+				}
+				
+//				if (checkInDate)
+//					hour = 15;
+//				else
+//					hour = 11;
+			
+				Calendar cal = Calendar.getInstance();
+			
+				cal.clear(); cal.set(year, month, day, hour, 00);
+			
+				Date D = cal.getTime();
+				
+				if( D.after( Calendar.getInstance().getTime() ) )
+					return D;
+				else 
+					throw new IllegalArgumentException("Check In/Out Dates, Cannot Precede Current Date");
+			}
+			else
+				throw new IllegalArgumentException("Invalid Date Format!!");
+		}
+		// end getDateInstance
+}

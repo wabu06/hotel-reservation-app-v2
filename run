@@ -1,0 +1,1 @@
+java -cp target/wabu-hotel-reservations-1.0.0.jar com.udacity.hotel.HotelApplication

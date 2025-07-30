@@ -1,0 +1,38 @@
+// HotelApplication.java
+
+/**
+ * @title Hotel Reservation Application
+ *
+ *
+ * @author W. K.  Burke
+ *
+ */
+
+package com.udacity.hotel;
+
+
+import com.udacity.hotel.ui.*;
+
+
+public class HotelApplication
+{
+	public static void main(String[] args)
+	{
+		MainMenu mm;
+		
+		if(args.length == 2)
+		{
+			if( args[1].toLowerCase().equals("gui") )
+				mm = guiMainMenu.getInstance();
+			else
+				mm = cliMainMenu.getInstance();
+		}
+		else
+			mm = cliMainMenu.getInstance();
+		
+		mm.launch().mainMenuManager();
+		
+		//MainMenu.launch().mainMenuManager();
+	}
+}
+
