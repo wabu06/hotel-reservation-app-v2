@@ -66,8 +66,7 @@ public class Room implements IRoom
 		}
 		
 		@Override
-		public int hashCode() {
-			return Objects.hash(roomNumber, price, type);
-		}
+		public int hashCode()
+			{ return Objects.hash(roomNumber, price, type, RoomReservations); }
 }
 

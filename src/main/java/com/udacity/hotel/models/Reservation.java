@@ -43,4 +43,9 @@ public class Reservation
 			
 			return customer.equals(R.customer) && room.equals(R.room) && checkInDate.equals(R.checkInDate) && checkOutDate.equals(R.checkOutDate);
 		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(customer, room, checkInDate, checkOutDate);
+		}
 }
