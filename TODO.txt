@@ -7,4 +7,6 @@
 7. Add purge data option to admin menu
 8. Adjust availability of rooms for reservations
 9. For admin created accounts, make so that user cannot make or change reservations until they have set their pin
-
+10. Make it possible to add customer in admin menu
+11. Add check in customer option in admin menu
+12. show whether or not a customer ever checked in for a reservation
