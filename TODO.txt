@@ -5,3 +5,6 @@
 5. Make it possible to add reservation from admin menu on behalf of a customer
 6. Show total cost of reservation when displaying a reservation
 7. Add purge data option to admin menu
+8. Adjust availability of rooms for reservations
+9. For admin created accounts, make so that user cannot make or change reservations until they have set their pin
+
