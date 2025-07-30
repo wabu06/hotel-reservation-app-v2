@@ -1,1 +1,1 @@
-# hotel-reservation-app
+# The Hotel Reservation App

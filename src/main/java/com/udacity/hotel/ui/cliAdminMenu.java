@@ -206,12 +206,10 @@ public class cliAdminMenu implements AdminMenu
 
 				do {
 				
-					System.out.println("\nWould you like to add another room?");
-					System.out.print("Please enter, Y(y/yes/Yes/YES) or N(n/no/No/NO): ");
+					System.out.println("\nWould you like to add another room (Y/N)?");
 					ans = cliMainMenu.CLI.nextLine();
 
-				} while( (ans.toLowerCase().compareTo("yes") != 0) && (ans.toLowerCase().compareTo("y") != 0) &&
-						(ans.toLowerCase().compareTo("no") != 0) && (ans.toLowerCase().compareTo("n") != 0) );
+				} while( (ans.toLowerCase().compareTo("yes") != 0) && (ans.toLowerCase().compareTo("y") != 0) && (ans.toLowerCase().compareTo("no") != 0) && (ans.toLowerCase().compareTo("n") != 0) );
 				
 				System.out.println();
 

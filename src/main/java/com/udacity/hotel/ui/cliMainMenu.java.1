@@ -134,31 +134,31 @@ public class cliMainMenu implements MainMenu
 			
 			Customer C = HR.getCustomer(email);
 
+			String ans;
+			
 			if( C == null )
 				C = createAccount(email);
-//			else
-//			{
-//				System.out.println("\nAn account was found for the email entered:\n\n" + C); // create method call confirmEmail
-//				
-//				do{
-//				
-//					System.out.print("\n\nPlease confirm(Y/n) ");
-//					ans = CLI.nextLine();
-//					
-//					if( ans.equals("") )
-//						break;
+			else
+			{
+				System.out.println("\nAn account was found for the email entered:\n\n" + C); // create method call confirmEmail
+				
+				do{
+				
+					System.out.print("\n\nPlease confirm(Y/n) ");
+					ans = CLI.nextLine();
+					
+					if( ans.equals("") )
+						break;
 
-//				} while( !( ans.toLowerCase().equals("y") || ans.toLowerCase().equals("n") ) );
-//				
-//				if (ans.toLowerCase().compareTo("n") == 0)
-//				{
-//					System.out.println("\nOK, let's create a new account!");
-//					C = createAccount( getEmail() );
-//					email = HR.getCustomerEmail(C);
-//				}
-//			}
-
-			String ans;
+				} while( !( ans.toLowerCase().equals("y") || ans.toLowerCase().equals("n") ) );
+				
+				if (ans.toLowerCase().compareTo("n") == 0)
+				{
+					System.out.println("\nOK, let's create a new account!");
+					C = createAccount( getEmail() );
+					email = HR.getCustomerEmail(C);
+				}
+			}
 			
 			String cidStr, codStr; // check IN/OUT dates, as entered by user
 			
@@ -311,7 +311,7 @@ public class cliMainMenu implements MainMenu
 			for(int i = 0; i < 35; i++)
 		 		line += "#";
 
-			items = "\n1.\tReserve a room\n2.\tSee my reservations\n3.\tCreate an account\n4.\tAdmin\n5.\tExit\n";
+			items = "\n1.\tFind and reserve a room\n2.\tSee my reservations\n3.\tCreate an account\n4.\tAdmin\n5.\tExit\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 
