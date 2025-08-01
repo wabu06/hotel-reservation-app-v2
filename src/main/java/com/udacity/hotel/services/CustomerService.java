@@ -16,10 +16,10 @@ public class CustomerService
 		
 		private CustomerService() { CustomerMap = new HashMap<String, Customer>(); } 
 		
-	 	public Customer addCustomer(String email, String firstName, String lastName)
+	 	public Customer addCustomer(String email, String firstName, String lastName, long pinHash)
 		{
 			
-			Customer C = new Customer(firstName, lastName, email);
+			Customer C = new Customer(firstName, lastName, email, pinHash);
 			CustomerMap.put(email, C);
 			return C;
 		}

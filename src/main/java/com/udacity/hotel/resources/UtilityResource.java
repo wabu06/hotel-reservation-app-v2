@@ -10,6 +10,23 @@ import com.udacity.hotel.services.*;
 
 public class UtilityResource
 {
+	public static Optional<String> validatePin(String pin)
+	{
+		Pattern pattern = Pattern.compile("[0-9]*");
+		
+		boolean match = pattern.matcher(pin).matches();
+		
+		if(!match)
+			return Optional.of("Pin must contain only digits!!");
+		
+		int len = pin.length();
+		
+		if(len != 6)
+			return Optional.of("Pin must have only six digits!!");
+		
+		return Optional.empty();
+	}
+	
 	public static boolean isRoomNumValid(String rmNum)
 		{
 			String rmRegX = "^\\w{1}\\d+$";

@@ -12,22 +12,40 @@ public class Customer
 		private String email;
 		private long pinHash;
 	
-		public Customer(String F, String L, String E, long H)
+		public Customer(String F, String L, String E)
 		{
-			email = E;
-			firstName = F;
-			lastName = L;
-			
-			pinHash = H;
+			String eRegX = "^(\\w+)@(\\w+)\\.(\\w+)$";
+			Pattern pattern = Pattern.compile(eRegX);
+			boolean match = pattern.matcher(E).matches();
+		
+			if (!match)
+			{
+				eRegX = "^(\\w+)@(\\w+)\\.(\\w+)\\.(\\w+)$";
+				pattern = Pattern.compile(eRegX);
+				match = pattern.matcher(E).matches();
+				
+				if(match)
+				{
+					email = E;
+					firstName = F;
+					lastName = L;
+				}
+				else
+					throw new IllegalArgumentException("Invalid Email Format!!");
+			}
+			else
+			{
+				email = E;
+				firstName = F;
+				lastName = L;
+			}
 		}
 		
 		public long getPinHash() {
 			return pinHash;
 		}
 		
-		public String getEmail() {
-			return email;
-		}
+		public String getEmail() { return email; }
 	
 		@Override 
 		public String toString() { return "Customer Name: " + firstName + " " + lastName + "\nCustomer Email: " + email; }

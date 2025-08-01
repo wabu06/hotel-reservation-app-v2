@@ -27,8 +27,8 @@ public class HotelResource
 		
 		public Customer getCustomer(String email) { return CS.getCustomer(email); }
 		
-		public Customer createACustomer(String  email,  String firstName, String lastName)
-			{ return CS.addCustomer(email, firstName, lastName); }
+		public Customer createACustomer(String  email,  String firstName, String lastName, long pinHash)
+			{ return CS.addCustomer(email, firstName, lastName, pinHash); }
 		
 		public IRoom getRoom(String roomNumber) { return RS.getARoom(roomNumber); }
 		
@@ -54,6 +54,21 @@ public class HotelResource
 			cod = cal.getTime();
 			
 			return findARoom(cid, cod);
+		}
+		
+		public boolean isAuthentic(String email, String pin)
+		{
+			Customer C = getCustomer(email);
+			
+			if(C == null)
+				return false;
+			
+			long pinHash = C.getPinHash();
+			
+			if( (pinHash != pin.hashCode()) && (!email.equalsIgnoreCase( C.getEmail() )))
+				return false;
+			else
+				return true;
 		}
 }
 

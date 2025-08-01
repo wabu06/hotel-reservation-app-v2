@@ -3,7 +3,7 @@ package com.udacity.hotel.ui;
 
 import java.util.*;
 //import java.util.Scanner;
-//import java.util.regex.*;
+import java.util.regex.*;
 
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
@@ -83,17 +83,36 @@ public class cliMainMenu implements MainMenu
 			// end of while
 		}
 		// end mainMenuManager
+		
+		String getPin()
+		{
+			String pin;
+			Optional<String> emsg;
+			
+			do
+			{
+				System.out.print("\nPlease enter your six digit pin: ");
+				pin = CLI.nextLine();
+
+				emsg = validatePin(pin);
+				
+				if(emsg.isPresent())
+					System.out.println('\n' + emsg.get());
+
+			} while(emsg.isPresent());
+			
+			return pin;
+		}
 
 		@Override
 		public void displayCustomerReservations()
 		{
 			String email = getEmail();
+			String pin = getPin();
 			
-			Customer C = HR.getCustomer(email);
-			
-			if (C == null)
+			if( !HR.isAuthentic(email, pin) )
 			{
-				System.out.println("\nYour Are Not A Current Customer\n");
+				System.out.println("\nInvalid Credentials!!\n");
 				return;
 			}
 			
@@ -116,7 +135,8 @@ public class cliMainMenu implements MainMenu
 			String email;
 			boolean valid;
 			
-			do {
+			do
+			{
 				System.out.print("\nPlease enter your email address, as name@domain.com: ");
 				email = CLI.nextLine();
 
@@ -136,27 +156,16 @@ public class cliMainMenu implements MainMenu
 
 			if( C == null )
 				C = createAccount(email);
-//			else
-//			{
-//				System.out.println("\nAn account was found for the email entered:\n\n" + C); // create method call confirmEmail
-//				
-//				do{
-//				
-//					System.out.print("\n\nPlease confirm(Y/n) ");
-//					ans = CLI.nextLine();
-//					
-//					if( ans.equals("") )
-//						break;
-
-//				} while( !( ans.toLowerCase().equals("y") || ans.toLowerCase().equals("n") ) );
-//				
-//				if (ans.toLowerCase().compareTo("n") == 0)
-//				{
-//					System.out.println("\nOK, let's create a new account!");
-//					C = createAccount( getEmail() );
-//					email = HR.getCustomerEmail(C);
-//				}
-//			}
+			else
+			{
+				String pin = getPin();
+			
+				if( !HR.isAuthentic(email, pin) )
+				{
+					System.out.println("\nInvalid Credentials!!\n");
+					return;
+				}
+			}
 
 			String ans;
 			
@@ -289,6 +298,8 @@ public class cliMainMenu implements MainMenu
 				System.out.println("\nThere Is An Existing Account With The Email: <" + email + ">, Please enter another email address!!");
 				email = getEmail();
 			}
+			
+			long pinHash = getPin().hashCode();
 
 			System.out.print("\nPlease enter your last name: ");
 			lastName = CLI.nextLine();
@@ -296,7 +307,7 @@ public class cliMainMenu implements MainMenu
 			System.out.print("Please enter your first name: ");
 			firstName = CLI.nextLine();
 			
-			Customer C = HR.createACustomer(email, firstName, lastName);
+			Customer C = HR.createACustomer(email, firstName, lastName, pinHash);
 				
 			System.out.println("\n" +  C + "\n");
 			
