@@ -3,6 +3,8 @@ package com.udacity.hotel.services;
 
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.concurrent.TimeUnit;
+
 
 import com.udacity.hotel.models.*;
 
@@ -36,7 +38,13 @@ public class ReservationService
 		{
 			// first check to see if room is available for the given dates
 			
-			Reservation R = new Reservation(customer, room, checkInDate, checkOutDate);
+			long diff = checkOutDate.getTime() - checkInDate.getTime();
+			
+			long staylength = TimeUnit.MILLISECONDS.toDays(diff) + 1;
+			
+			Double totalCost = staylength * room.getRoomPrice();
+			
+			Reservation R = new Reservation(customer, room, staylength, totalCost, checkInDate, checkOutDate);
 			
 			//RoomMap.get( room.getRoomNumber() ).addReservation(R);
 			

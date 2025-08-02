@@ -7,15 +7,29 @@ import java.util.*;
 
 public class Reservation
 {
+		static int IDcount = 0;
+		
+		private int ID;
+		
 		private Customer customer;
 		private IRoom room;
+		
+		private long staylength;
+		private Double total;
+		
 		private Date checkInDate;
 		private Date checkOutDate;
 	
-		public Reservation(Customer C, IRoom R, Date cid, Date cod)
+		public Reservation(Customer C, IRoom R, long SL, Double T, Date cid, Date cod)
 		{
+			ID = ++IDcount;
+			
 			customer = C;
 			room = R;
+			
+			staylength = SL;
+			total = T;
+			
 			checkInDate = cid;
 			checkOutDate = cod;
 		}
@@ -26,7 +40,7 @@ public class Reservation
 		@Override 
 		public String toString()
 		{ 
-			String resStr = customer.toString() + "\n" + room.toString() + "\nCheck In Date: ";
+			String resStr = "Reservation ID: " + ID + "\n" + customer.toString() + "\n" + room.toString() + "\nLength Of Stay: " + staylength + " nights" + "\nTotal Cost Of Stay: $" + total + "\nCheck In Date: ";
 			return resStr + checkInDate.toString() + "\nCheck Out Date: " + checkOutDate.toString();
 		}
 		

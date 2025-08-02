@@ -41,7 +41,7 @@ public class Room implements IRoom
 		@Override 
 		public String toString()
 		{
-			String RmStr = "Room Number: " + roomNumber + "\nPrice: $" + price + "\nRoom Type: ";
+			String RmStr = "Room Number: " + roomNumber + "\nPer Night Price: $" + price + "\nRoom Type: ";
 		
 			if (type ==  RoomType.SINGLE)
 				RmStr += "SINGLE";
