@@ -60,8 +60,8 @@ public class HotelResource
 			return RS.getNonCanceledReservations(email);
 		}
 		
-		public Optional<Reservation> cancelReservation(Collection<Reservation> reserves, int select) {
-			return RS.cancelReservation(reserves, select);
+		public Optional<Reservation> cancelReservation(Collection<Reservation> reserves, int ID) {
+			return RS.cancelReservation(reserves, ID);
 		}
 		
 		public boolean isAuthentic(String email, String pin)

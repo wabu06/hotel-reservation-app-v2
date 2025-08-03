@@ -57,21 +57,25 @@ public class cliMainMenu implements MainMenu
 					case 1:
 						reserveRoom();
 					break;
-				
+					
 					case 2:
-						displayCustomerReservations();
+						cancelAReservation();
 					break;
 				
 					case 3:
-						createAccount( getEmail() );
+						displayCustomerReservations();
 					break;
 				
 					case 4:
+						createAccount( getEmail() );
+					break;
+				
+					case 5:
 						System.out.println();
 						AM.adminMenuManager();
 					break;
 				
-					case 5:
+					case 6:
 						CLI.close();
 					return;
 
@@ -157,7 +161,7 @@ public class cliMainMenu implements MainMenu
 			return email;
 		}
 		
-		public void cancelReservation()
+		public void cancelAReservation()
 		{
 			String email = validateCredentials();
 			
@@ -165,6 +169,11 @@ public class cliMainMenu implements MainMenu
 				return;
 			
 			Collection<Reservation> reserves = HR.getNonCanceledReservations(email);
+			
+			if(reserves.isEmpty()) {
+				System.out.println("\nThere are no Reservations to Cancel!!\n");
+				return;
+			}
 			
 			int select;
 			
@@ -175,10 +184,11 @@ public class cliMainMenu implements MainMenu
 				for(Reservation R: reserves)
 					System.out.println(R + "\n");
 			
-				System.out.print("Select Reservation to cancel, by entering the Reservation ID: ");
+				System.out.print("\nSelect Reservation to cancel, by entering the corresponding Reservation ID: ");
 			
 				try {
 					select = Integer.parseInt( CLI.nextLine() );
+					System.out.println();
 				}
 				catch(Exception ex) {
 					System.out.println("\nInvalid Input!!\n");
@@ -188,6 +198,11 @@ public class cliMainMenu implements MainMenu
 				RO = HR.cancelReservation(reserves, select);
 			}
 			while(RO.isEmpty());
+			
+			System.out.println("Selected Reservation Has Been Canceled:\n");
+			
+			System.out.println(RO.get() + "\n");
+			
 		}
 		
 		@Override
@@ -365,7 +380,7 @@ public class cliMainMenu implements MainMenu
 			for(int i = 0; i < 35; i++)
 		 		line += "#";
 
-			items = "\n1.\tReserve a room\n2.\tSee my reservations\n3.\tCreate an account\n4.\tAdmin\n5.\tExit\n";
+			items = "\n1.\tReserve A Room\n2.\tCancel A Reservation\n3.\tSee My Reservations\n4.\tCreate An Account\n5.\tAdmin\n6.\tExit\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 

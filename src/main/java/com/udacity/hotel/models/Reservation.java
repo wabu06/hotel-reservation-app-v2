@@ -57,8 +57,15 @@ public class Reservation
 		@Override 
 		public String toString()
 		{ 
-			String resStr = "Reservation ID: " + ID + "\n" + customer.toString() + "\n" + room.toString() + "\nLength Of Stay: " + staylength + " nights" + "\nTotal Cost Of Stay: $" + total + "\nCheck In Date: ";
-			return resStr + checkInDate.toString() + "\nCheck Out Date: " + checkOutDate.toString();
+			String resStr = "Reservation ID: " + ID + "\n" + customer.toString() + "\n" + room.toString();
+			resStr = resStr + "\nLength Of Stay: " + staylength + " nights" + "\nTotal Cost Of Stay: $" + total;
+			
+			if(canceled)
+				resStr = resStr + "\nCheck In Date: " + checkInDate.toString() + " (CANCELED)" + "\nCheck Out Date: " + checkOutDate.toString() + " (CANCELED)";
+			else
+				resStr = resStr + "\nCheck In Date: " + checkInDate.toString() + "\nCheck Out Date: " + checkOutDate.toString();
+				
+			return resStr;
 		}
 		
 		@Override 

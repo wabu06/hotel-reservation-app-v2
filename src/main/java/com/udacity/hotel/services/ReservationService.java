@@ -73,7 +73,8 @@ public class ReservationService
 			{
 				if ( rm.hasReservations() )
 				{
-					boolean vacant = rm.getReservations().stream().allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
+					boolean vacant = rm.getReservations().stream().filter(r -> !r.isCanceled())
+																												.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
 					
 					if(vacant)
 						rooms.put( rm.getRoomNumber(), rm );
@@ -95,8 +96,12 @@ public class ReservationService
 			return ReservationMap.values().stream().flatMap( a -> a.stream() ).collect(Collectors.toList());
 		}
 		
-		public Collection<Reservation> getNonCanceledReservations(String email) {
-			return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
+		public Collection<Reservation> getNonCanceledReservations(String email)
+		{
+			if( ReservationMap.get(email) == null )
+				return List.of();
+			else	
+				return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
 		}
 		
 		public Optional<Reservation> cancelReservation(Collection<Reservation> reserves, int ID)

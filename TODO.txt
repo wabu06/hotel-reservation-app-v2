@@ -1,6 +1,6 @@
 *1. Have customers authenticate via a pin
 2. When showing reservations, distinguish between future & past reservations, as well as current stays
-3. Make it possible to cancel reservations
+*3. Make it possible to cancel reservations
 4. Make it possible to update a reservation's check-in and/or check-out dates
 5. Make it possible to add reservation from admin menu on behalf of a customer
 *6. Show total cost of reservation when displaying a reservation
@@ -10,4 +10,4 @@
 10. Make it possible to add customer in admin menu
 11. Add check in customer option in admin menu
 12. show whether or not a customer ever checked in for a reservation
-13. fix findRooms for canceled reservations
+*13. fix findRooms for canceled reservations, & display canceled reservations as being canceled
