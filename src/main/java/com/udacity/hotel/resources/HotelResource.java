@@ -55,6 +55,14 @@ public class HotelResource
 			
 			return findARoom(cid, cod);
 		}
+		 
+		public Collection<Reservation> getNonCanceledReservations(String email) {
+			return RS.getNonCanceledReservations(email);
+		}
+		
+		public Optional<Reservation> cancelReservation(Collection<Reservation> reserves, int select) {
+			return RS.cancelReservation(reserves, select);
+		}
 		
 		public boolean isAuthentic(String email, String pin)
 		{

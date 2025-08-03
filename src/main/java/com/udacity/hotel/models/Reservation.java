@@ -19,6 +19,8 @@ public class Reservation
 		
 		private Date checkInDate;
 		private Date checkOutDate;
+		
+		private boolean canceled;
 	
 		public Reservation(Customer C, IRoom R, long SL, Double T, Date cid, Date cod)
 		{
@@ -32,10 +34,25 @@ public class Reservation
 			
 			checkInDate = cid;
 			checkOutDate = cod;
+			
+			canceled = false;
 		}
 		
 		public Date getCheckInDate() { return checkInDate; }
 		public Date getCheckOutDate() { return checkOutDate; }
+		
+		public int getID() {
+			return ID;
+		}
+		
+		public boolean isCanceled() {
+			return canceled;
+		}
+		
+		public boolean cancel() {
+			canceled = true;
+			return canceled;
+		}
 	
 		@Override 
 		public String toString()

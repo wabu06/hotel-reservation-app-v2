@@ -63,39 +63,6 @@ public class ReservationService
 			return R;
 		}
 		
-//		public HashMap<String, IRoom> findRooms(Date checkInDate, Date checkOutDate)
-//		{ 
-//			HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
-//			
-//			Date cid, cod;
-//			
-//			boolean vacant = false;
-//			
-//			for(IRoom rm: RoomMap.values() )
-//			{
-//				if ( rm.hasReservations() )
-//				{
-//					for( Reservation R: rm.getReservations() )
-//					{
-//						cid = R.getCheckInDate();
-//						cod = R.getCheckOutDate();
-//						
-//						vacant = checkOutDate.before(cid) || checkInDate.after(cod);
-//						
-//						if( !vacant  )
-//							break;
-//					}
-//					
-//					if(vacant)
-//						rooms.put( rm.getRoomNumber(), rm );
-//				}
-//				else
-//					rooms.put( rm.getRoomNumber(), rm );
-//			}
-//			
-//			return rooms;
-//		}
-		
 		public HashMap<String, IRoom> findRooms(Date checkInDate, Date checkOutDate)
 		{
 			HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
@@ -126,6 +93,22 @@ public class ReservationService
 
 		public Collection<Reservation> getAllReservations() {
 			return ReservationMap.values().stream().flatMap( a -> a.stream() ).collect(Collectors.toList());
+		}
+		
+		public Collection<Reservation> getNonCanceledReservations(String email) {
+			return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
+		}
+		
+		public Optional<Reservation> cancelReservation(Collection<Reservation> reserves, int ID)
+		{
+			Optional<Reservation> RO = reserves.stream().filter( r -> r.getID() == ID).findFirst();
+			
+			if(RO.isPresent()) {
+				RO.get().cancel();
+				return RO;
+			}
+			else
+				return Optional.empty();
 		}
 }
 

@@ -104,7 +104,7 @@ public class cliMainMenu implements MainMenu
 			return pin;
 		}
 		
-		String validateCredentials()
+		boolean validCredentials()
 		{
 			String email = getEmail();
 			String pin = getPin();
@@ -112,19 +112,23 @@ public class cliMainMenu implements MainMenu
 			if( !HR.isAuthentic(email, pin) )
 			{
 				System.out.println("\nInvalid Credentials!!\n");
-				return null;
+				return false;
 			}
 			else
-				return email;
+				return true;
 		}
 
 		@Override
 		public void displayCustomerReservations()
 		{
-			String email = validateCredentials();
+			String email = getEmail();
+			String pin = getPin();
 			
-			if(email == null)
+			if( !HR.isAuthentic(email, pin) )
+			{
+				System.out.println("\nInvalid Credentials!!\n");
 				return;
+			}
 			
 			Collection<Reservation> reserves = HR.getCustomerReservations(email);
 			
@@ -155,39 +159,6 @@ public class cliMainMenu implements MainMenu
 			} while(!valid);
 			
 			return email;
-		}
-		
-		public void cancelReservation()
-		{
-			String email = validateCredentials();
-			
-			if(email == null)
-				return;
-			
-			Collection<Reservation> reserves = HR.getNonCanceledReservations(email);
-			
-			int select;
-			
-			Optional<Reservation> RO = Optional.empty();
-			
-			do
-			{
-				for(Reservation R: reserves)
-					System.out.println(R + "\n");
-			
-				System.out.print("Select Reservation to cancel, by entering the Reservation ID: ");
-			
-				try {
-					select = Integer.parseInt( CLI.nextLine() );
-				}
-				catch(Exception ex) {
-					System.out.println("\nInvalid Input!!\n");
-					continue;
-				}
-				
-				RO = HR.cancelReservation(reserves, select);
-			}
-			while(RO.isEmpty());
 		}
 		
 		@Override
