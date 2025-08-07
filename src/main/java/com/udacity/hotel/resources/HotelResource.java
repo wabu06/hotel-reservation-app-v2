@@ -40,6 +40,10 @@ public class HotelResource
 		
 		public HashMap<String, IRoom> findARoom(Date checkIn, Date checkOut)
 			{ return RS.findRooms(checkIn, checkOut); }
+			
+		public int getRoomCount() {
+			return RS.getRoomCount();
+		}
 		
 		public HashMap<String, IRoom> recommendedRooms(Date cid, Date cod)
 		{

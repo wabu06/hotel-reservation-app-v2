@@ -205,8 +205,31 @@ public class cliMainMenu implements MainMenu
 			
 		}
 		
-		void searchForRooms(String email)
+		@Override
+		public void reserveRoom()
 		{
+			if(HR.getRoomCount() == 0) {
+				System.out.println("\nThere Are No Rooms To Reserve Yet!!\n");
+				return;
+			}
+		
+			String email = getEmail();
+			
+			Customer C = HR.getCustomer(email);
+
+			if( C == null )
+				C = createAccount(email);
+			else
+			{
+				String pin = getPin();
+			
+				if( !HR.isAuthentic(email, pin) )
+				{
+					System.out.println("\nInvalid Credentials!!\n");
+					return;
+				}
+			}
+
 			String ans;
 			
 			String cidStr, codStr; // check IN/OUT dates, as entered by user
@@ -325,34 +348,6 @@ public class cliMainMenu implements MainMenu
 				// end outer else
 			}
 			// end of outermost while
-		}
-		
-		@Override
-		public void reserveRoom()
-		{
-			if(HR.getRoomCount() == 0) {
-				System.out.println("\nThere Are No Rooms To Reserve Yet!!\n");
-				return;
-			}
-		
-			String email = getEmail();
-			
-			Customer C = HR.getCustomer(email);
-
-			if( C == null )
-				C = createAccount(email);
-			else
-			{
-				String pin = getPin();
-			
-				if( !HR.isAuthentic(email, pin) )
-				{
-					System.out.println("\nInvalid Credentials!!\n");
-					return;
-				}
-			}
-			
-			searchForRooms(email);
 		}
 		// end of reserveRoom()
 

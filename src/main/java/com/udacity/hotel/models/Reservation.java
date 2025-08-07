@@ -38,8 +38,23 @@ public class Reservation
 			canceled = false;
 		}
 		
-		public Date getCheckInDate() { return checkInDate; }
-		public Date getCheckOutDate() { return checkOutDate; }
+		public Date getCheckInDate() {
+			return checkInDate;
+		}
+		
+		public Date getCheckOutDate() {
+			return checkOutDate;
+		}
+		
+		public Date setCheckInDate(Date cid) {
+			checkInDate = cid;
+			return checkInDate;
+		}
+		
+		public Date setCheckOutDate(Date cod) {
+			checkOutDate = cod;
+			return checkOutDate;
+		}
 		
 		public int getID() {
 			return ID;

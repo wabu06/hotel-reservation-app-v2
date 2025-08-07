@@ -34,6 +34,10 @@ public class ReservationService
 			return RoomMap.values();
 		}
 		
+		public int getRoomCount() {
+			return RoomMap.size();
+		}
+		
 		public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate)
 		{
 			// first check to see if room is available for the given dates
