@@ -68,6 +68,11 @@ public class Reservation
 			canceled = true;
 			return canceled;
 		}
+		
+		public boolean uncancel() {
+			canceled = false;
+			return canceled;
+		}
 	
 		@Override 
 		public String toString()

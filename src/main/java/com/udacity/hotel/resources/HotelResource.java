@@ -35,6 +35,14 @@ public class HotelResource
 		public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate)
 			{ return RS.reserveARoom( CS.getCustomer(customerEmail), room, checkInDate, CheckOutDate ); }
 		
+		public Collection<Reservation> getAllCustomerReservations(String customerEmail) {
+			return RS.getCustomerReservations(customerEmail);
+		}
+		
+		public Optional<Reservation> getReservationByID(String email, int ID) {
+			return RS.getReservationByID(email, ID);
+		}
+		
 		public Collection<Reservation> getCustomerReservations(String customerEmail)
 			{ return RS.getCustomersReservation( CS.getCustomer(customerEmail) ); }
 		

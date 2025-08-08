@@ -90,6 +90,10 @@ public class ReservationService
 			return rooms;
 		}
 		
+		public Collection<Reservation> getCustomerReservations(String email) {
+			return ReservationMap.get(email);
+		}
+		
 		public Collection<Reservation> getCustomersReservation(Customer customer)
 			{ return ReservationMap.get( customer.getEmail() ); }
 		
@@ -106,6 +110,12 @@ public class ReservationService
 				return List.of();
 			else	
 				return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
+		}
+		
+		public Optional<Reservation> getReservationByID(String email, int ID)
+		{
+			Optional<Reservation> RO = ReservationMap.get(email).stream().filter( r -> r.getID() == ID).findFirst();
+			return RO;
 		}
 		
 		public Optional<Reservation> cancelReservation(Collection<Reservation> reserves, int ID)

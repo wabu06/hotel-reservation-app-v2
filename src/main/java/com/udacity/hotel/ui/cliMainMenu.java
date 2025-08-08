@@ -59,23 +59,27 @@ public class cliMainMenu implements MainMenu
 					break;
 					
 					case 2:
+						changeReservation();
+					break;
+					
+					case 3:
 						cancelAReservation();
 					break;
 				
-					case 3:
+					case 4:
 						displayCustomerReservations();
 					break;
 				
-					case 4:
+					case 5:
 						createAccount( getEmail() );
 					break;
 				
-					case 5:
+					case 6:
 						System.out.println();
 						AM.adminMenuManager();
 					break;
 				
-					case 6:
+					case 7:
 						CLI.close();
 					return;
 
@@ -205,18 +209,19 @@ public class cliMainMenu implements MainMenu
 			
 		}
 		
-		void searchForRooms(String email)
+		ResInfo searchForRooms()
 		{
 			String ans;
 			
 			String cidStr, codStr; // check IN/OUT dates, as entered by user
 			
-			Date cid, cod; // check IN/OUT dates
+			Date cid = null;
+			Date cod = null; // check IN/OUT dates
 			
 			Calendar cal;
 			
 			HashMap<String, IRoom> rooms;
-			String rm;
+			String rm = "";
 			
 			while(true)
 			{
@@ -291,7 +296,8 @@ public class cliMainMenu implements MainMenu
 								rm = CLI.nextLine(); rm = rm.toUpperCase();
 							} 
 							
-							System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
+							//return new ResInfo(rm, cid, cod);
+							//System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
 							break;
 						}
 						else
@@ -318,13 +324,64 @@ public class cliMainMenu implements MainMenu
 				
 						} while( !rooms.containsKey(rm) );
 				
-						System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
+						//return new ResInfo(rm, cid, cod);
+						//System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
 						break; 
 					}
 				}
 				// end outer else
 			}
 			// end of outermost while
+			return new ResInfo(rm, cid, cod);
+		}
+		
+		void changeReservation()
+		{
+			String email = validateCredentials();
+			
+			if(email == null)
+				return;
+			
+			Collection<Reservation> reserves = HR.getAllCustomerReservations(email);
+			
+			if(reserves == null) {
+				System.out.println("\nYou Have No Reservations\n");
+				return;
+			}
+			
+			System.out.println("\nYou Have The Following Reservations:\n");
+			
+			for(Reservation r: reserves)
+				System.out.println( "\n" + r + "\n");
+				
+			int ID;
+			
+			Optional<Reservation> RO;
+			
+			do
+			{
+				System.out.print("\nSelect Reservation You Would Like To Change, Using Reservation ID: ");
+				
+				try {
+					ID = Integer.parseInt( CLI.nextLine() );
+				}
+				catch(Exception ex) {
+					System.out.println("\nInvalid Input!!\n");
+					continue;
+				}
+				
+				RO = HR.getReservationByID(email, ID);
+				
+				if(RO.isEmpty()) {
+					System.out.println("\nThere's No Reservation With ID Entered!!'\n");
+					continue;
+				}
+			
+				break;
+			}
+			while(true);
+			
+			
 		}
 		
 		@Override
@@ -352,7 +409,14 @@ public class cliMainMenu implements MainMenu
 				}
 			}
 			
-			searchForRooms(email);
+			ResInfo RI = searchForRooms();
+			
+			String rm = RI.getRoom();
+			
+			Date cid = RI.getCheckInDate();
+			Date cod = RI.getCheckOutDate();
+			
+			System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
 		}
 		// end of reserveRoom()
 
@@ -390,10 +454,38 @@ public class cliMainMenu implements MainMenu
 			for(int i = 0; i < 35; i++)
 		 		line += "#";
 
-			items = "\n1.\tReserve A Room\n2.\tCancel A Reservation\n3.\tSee My Reservations\n4.\tCreate An Account\n5.\tAdmin\n6.\tExit\n";
+			items = "\n1.\tReserve A Room\n2.\tChange A Reservation\n3.\tCancel A Reservation\n4.\tSee My Reservations\n5.\tCreate An Account\n6.\tAdmin\n7.\tExit\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 
 			return "Main Menu\n" + line + items + line + prompt;
+		}
+		
+		public class ResInfo
+		{
+			private String room;
+			
+			private Date checkInDate; 
+			private Date checkOutDate;
+			
+			public ResInfo(String rm, Date cid, Date cod)
+			{
+				room = rm;
+				checkInDate = cid;
+				checkOutDate = cod;
+				
+			}
+			
+			String getRoom() {
+				return room;
+			}	
+			
+			Date getCheckInDate() {
+				return checkInDate;
+			}
+			
+			Date getCheckOutDate() {
+				return checkOutDate;
+			}
 		}
 }
