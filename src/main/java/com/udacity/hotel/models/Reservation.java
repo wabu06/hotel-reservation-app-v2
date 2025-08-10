@@ -38,6 +38,25 @@ public class Reservation
 			canceled = false;
 		}
 		
+		public IRoom getRoom() {
+			return room;
+		}
+
+		public long setStayLength(long sl) {
+			staylength = sl;
+			return staylength;
+		}
+		
+		public Double setTotal(Double t) {
+			total = t;
+			return total;
+		}
+		
+		public IRoom setRoom(IRoom r) {
+			room = r;
+			return room;
+		}
+		
 		public Date getCheckInDate() {
 			return checkInDate;
 		}

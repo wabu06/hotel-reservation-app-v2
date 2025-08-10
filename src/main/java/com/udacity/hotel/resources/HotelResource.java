@@ -53,17 +53,29 @@ public class HotelResource
 			return RS.getRoomCount();
 		}
 		
+		public Reservation removeRoomReservation(Reservation reservation) {
+			return RS.removeReservationFromRoom(reservation);
+		}
+		
+		public Reservation restoreRoomReservation(Reservation R) {
+			return RS.restoreReservationToRoom(R);
+		}
+		
+		public Reservation changeReservation(Reservation R, String rm, Date cid, Date cod) {
+			return RS.changeReservationRoom(R, rm, cid, cod);
+		}
+		
 		public HashMap<String, IRoom> recommendedRooms(Date cid, Date cod)
 		{
-			Calendar cal = Calendar.getInstance();
-						
-			cal.setTime(cid);
-			cal.add(Calendar.DAY_OF_MONTH, 7);
-			cid = cal.getTime();
-						
-			cal.setTime(cod);
-			cal.add(Calendar.DAY_OF_MONTH, 7);
-			cod = cal.getTime();
+//			Calendar cal = Calendar.getInstance();
+//						
+//			cal.setTime(cid);
+//			cal.add(Calendar.DAY_OF_MONTH, 7);
+//			cid = cal.getTime();
+//						
+//			cal.setTime(cod);
+//			cal.add(Calendar.DAY_OF_MONTH, 7);
+//			cod = cal.getTime();
 			
 			return findARoom(cid, cod);
 		}

@@ -43,7 +43,7 @@ public class Customer
 		
 			Customer C = (Customer) O;
 			
-			return firstName.equals(C.firstName) && lastName.equals(C.lastName) &&  email.equals(C.email);
+			return firstName.equals(C.firstName) && lastName.equals(C.lastName) &&  email.equals(C.email) && (pinHash == C.pinHash);
 		}
 		
 		@Override

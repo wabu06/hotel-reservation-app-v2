@@ -38,6 +38,44 @@ public class ReservationService
 			return RoomMap.size();
 		}
 		
+		public Reservation removeReservationFromRoom(Reservation R)
+		{
+			Collection<Reservation> rmReservations = R.getRoom().getReservations();
+			
+			if(!rmReservations.remove(R))
+				throw new IllegalArgumentException("reservation not found");
+			
+			return R;
+		}
+		
+		public Reservation restoreReservationToRoom(Reservation R) {
+			R.getRoom().addReservation(R);
+			return R;
+		}
+		
+		public Reservation changeReservationRoom(Reservation R, String rm, Date cid, Date cod)
+		{
+			long diff = cod.getTime() - cid.getTime();
+			
+			long staylength = TimeUnit.MILLISECONDS.toDays(diff) + 1;
+			
+			IRoom room = RoomMap.get(rm);
+			
+			R.setRoom(room);
+			
+			Double totalCost = staylength * room.getRoomPrice();
+			
+			R.setStayLength(staylength);
+			R.setTotal(totalCost);
+			
+			R.setCheckInDate(cid);
+			R.setCheckOutDate(cod);
+			
+			room.addReservation(R);
+				
+			return R;
+		}
+		
 		public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate)
 		{
 			// first check to see if room is available for the given dates

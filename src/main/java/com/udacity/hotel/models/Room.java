@@ -25,6 +25,11 @@ public class Room implements IRoom
 		public Double getRoomPrice() { return price; }
 		public RoomType getRoomType() { return type; }
 		
+		public Double setRoomPrice(Double p) {
+			price = p;
+			return price;
+		}
+		
 		public ArrayList<Reservation> getReservations() { return RoomReservations; }
 		public void addReservation(Reservation R) { RoomReservations.add(R); }
 		public boolean hasReservations() { return !RoomReservations.isEmpty(); }
