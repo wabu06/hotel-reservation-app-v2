@@ -27,6 +27,10 @@ public class UtilityResource
 		return Optional.empty();
 	}
 	
+	public static boolean isPhoneNumberValid(String number) {
+		return Pattern.compile("\\d{3}-\\d{3}-\\d{4}").matcher(number).matches();
+	}
+	
 	public static boolean isRoomNumValid(String rmNum)
 		{
 			String rmRegX = "^\\w{1}\\d+$";

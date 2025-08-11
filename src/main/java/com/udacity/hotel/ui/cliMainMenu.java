@@ -146,6 +146,20 @@ public class cliMainMenu implements MainMenu
 					System.out.println("\n" + R + "\n");
 			}
 		}
+		
+		String getPhoneNumber()
+		{
+			String number;
+			
+			do
+			{
+				System.out.print("\nPlease enter your phone number, as (###-###-####): ");
+				number = CLI.nextLine();
+			}
+			while( !isPhoneNumberValid(number) );
+			
+			return number;
+		}
 
 		@Override
 		public String getEmail()
@@ -417,7 +431,7 @@ public class cliMainMenu implements MainMenu
 			Date cid = RI.getCheckInDate();
 			Date cod = RI.getCheckOutDate();
 			
-			HR.changeReservation(reservation, rm, cid, cod);
+			System.out.println( "\n" + HR.changeReservation(reservation, rm, cid, cod) + "\n");
 		}
 		
 		@Override
@@ -475,7 +489,9 @@ public class cliMainMenu implements MainMenu
 			System.out.print("Please enter your first name: ");
 			firstName = CLI.nextLine();
 			
-			Customer C = HR.createACustomer(email, firstName, lastName, pinHash);
+			String number = getPhoneNumber();
+			
+			Customer C = HR.createACustomer(number, email, firstName, lastName, pinHash);
 				
 			System.out.println("\n" +  C + "\n");
 			

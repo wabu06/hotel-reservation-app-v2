@@ -27,8 +27,8 @@ public class HotelResource
 		
 		public Customer getCustomer(String email) { return CS.getCustomer(email); }
 		
-		public Customer createACustomer(String  email,  String firstName, String lastName, long pinHash)
-			{ return CS.addCustomer(email, firstName, lastName, pinHash); }
+		public Customer createACustomer(String number, String  email,  String firstName, String lastName, long pinHash)
+			{ return CS.addCustomer(number, email, firstName, lastName, pinHash); }
 		
 		public IRoom getRoom(String roomNumber) { return RS.getARoom(roomNumber); }
 		

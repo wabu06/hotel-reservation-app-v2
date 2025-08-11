@@ -1,7 +1,7 @@
 *1. Have customers authenticate via a pin
 2. When showing reservations, distinguish between future & past reservations, as well as current stays
 *3. Make it possible to cancel reservations
-4. Make it possible to update a reservation's check-in and/or check-out dates
+*4. Make it possible to update a reservation's check-in and/or check-out dates
 5. Make it possible to add reservation from admin menu on behalf of a customer
 *6. Show total cost of reservation when displaying a reservation
 7. Add purge data option to admin menu
@@ -12,4 +12,8 @@
 12. show whether or not a customer ever checked in for a reservation
 *13. fix findRooms for canceled reservations, & display canceled reservations as being canceled
 14. Make it possible to change the cost of a room
-15. add phone number for customer info
+*15. add phone number for customer info
+
+^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$
+[\\+]?[(]?[0-9]{3}[)]?[-\s\\.]?[0-9]{3}[-\s\\.]?[0-9]{4,6} - proper java
+\\d{3}-\\d{3}-\\d{4}
