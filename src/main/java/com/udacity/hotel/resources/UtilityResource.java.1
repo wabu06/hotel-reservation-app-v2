@@ -49,8 +49,18 @@ public class UtilityResource
 		
 		public static boolean isEmailValid(String email)
 		{ 
-			String eRegX = "[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}"; // name@domain.com, name@domain.com.uk
-			return Pattern.compile(eRegX).matcher(email).matches();
+			String eRegX = "^(\\w+)@(\\w+)\\.(\\w+)$"; // name@domain.com
+			Pattern pattern = Pattern.compile(eRegX);
+
+			if( pattern.matcher(email).matches() )
+				return true;
+			else
+			{
+				eRegX = "^(\\w+)@(\\w+)\\.(\\w+)\\.(\\w+)$"; // name@domain.com.uk
+				pattern = Pattern.compile(eRegX);
+				
+				return pattern.matcher(email).matches();
+			}
 		}
 		
 		static boolean isLeapYear(int year)

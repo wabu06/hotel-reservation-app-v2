@@ -10,6 +10,8 @@ public interface IRoom
 	public Double getRoomPrice();
 	public RoomType getRoomType();
 	public boolean isFree();
+	
+	public Double setRoomPrice(Double p);
 		
 	public ArrayList<Reservation> getReservations();
 	public void addReservation(Reservation R);

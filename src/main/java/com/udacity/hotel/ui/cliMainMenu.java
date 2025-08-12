@@ -161,8 +161,7 @@ public class cliMainMenu implements MainMenu
 			return number;
 		}
 
-		@Override
-		public String getEmail()
+		String getEmail()
 		{
 			String email;
 			boolean valid;

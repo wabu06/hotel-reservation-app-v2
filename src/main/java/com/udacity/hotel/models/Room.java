@@ -20,6 +20,15 @@ public class Room implements IRoom
 			
 			RoomReservations = new ArrayList<Reservation>();
 		}
+		
+		public Room(Room rm)
+		{
+			roomNumber = rm.roomNumber;
+			price = rm.price;
+			type = rm.type;
+			
+			RoomReservations = null;
+		}
 	
 		public String getRoomNumber() { return roomNumber; }
 		public Double getRoomPrice() { return price; }

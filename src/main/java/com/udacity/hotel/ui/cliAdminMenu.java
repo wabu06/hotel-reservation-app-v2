@@ -85,6 +85,10 @@ public class cliAdminMenu implements AdminMenu
 					break;
 				
 					case 5:
+						changeRoomPrice();
+					break;
+				
+					case 6:
 						//CLI.close();
 						System.out.println(); // return to main menu
 						return;
@@ -113,12 +117,14 @@ public class cliAdminMenu implements AdminMenu
 		}
 		
 		@Override
-		public void displayAllRooms()
+		public Collection<IRoom> displayAllRooms()
 		{
 			Collection<IRoom> rooms = AR.getAllRooms();
 			
-			if (rooms.size() == 0)
-				System.out.println("\nThere Are No Rooms To Display\n");
+			if (rooms.size() == 0) {
+				System.out.println("\nNeed To Add Rooms!!\n");
+				return null;
+			}
 			else
 			{
 				//System.out.println("\nHotel Rooms Listing");
@@ -127,7 +133,63 @@ public class cliAdminMenu implements AdminMenu
 					System.out.println("\n" + R + "\n");
 			
 				System.out.println();
+				
+				return rooms;
 			}
+		}
+		
+		@Override
+		public void changeRoomPrice()
+		{
+			Collection<IRoom> rooms = displayAllRooms();
+			
+			if(rooms == null)
+				return;
+		
+			String roomNumber;
+			
+			while(true)
+			{
+				System.out.print("Enter The Room Number For Price Change: ");
+				roomNumber = cliMainMenu.CLI.nextLine();
+					
+				if( roomNumber.length() > 0 )
+				{
+					if( isRoomNumValid(roomNumber) )
+					{
+						roomNumber = roomNumber.toUpperCase();
+							
+						if( !AR.roomExist(roomNumber) )
+							System.out.println("\nThere is no room with the number: [" + roomNumber + "]\n");
+						else
+							break;
+					}
+					else
+						System.out.println("\n[" + roomNumber + "] Is Not A Valid Room Number\n");
+				}
+			}
+			
+			Double price;
+			
+			while(true)
+			{
+				try
+				{	
+					System.out.print("Enter new price per night: ");
+					price = Double.valueOf( cliMainMenu.CLI.nextLine() );
+					break;
+				}
+				catch(Exception ex)
+				{
+					System.out.println("\nInvalid Input!!\n");
+					continue;
+				}
+			}
+			
+			IRoom room = AR.getRoom(roomNumber);
+			room.setRoomPrice(price);
+			
+			System.out.println("\n" + room + "\n");
 		}
 
 		@Override
@@ -228,7 +290,7 @@ public class cliAdminMenu implements AdminMenu
 			 for(int i = 0; i < 35; i++)
 		 		line += "*";
 
-			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tAdd a Room\n5.\tBack to Main Menu\n";
+			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tAdd a Room\n5.\tChange A Room's Price Per Night\n6.\tBack to Main Menu\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 

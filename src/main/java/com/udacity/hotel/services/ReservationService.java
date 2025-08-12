@@ -86,7 +86,7 @@ public class ReservationService
 			
 			Double totalCost = staylength * room.getRoomPrice();
 			
-			Reservation R = new Reservation(customer, room, staylength, totalCost, checkInDate, checkOutDate);
+			Reservation R = new Reservation(customer, new Room( (Room) room ), staylength, totalCost, checkInDate, checkOutDate);
 			
 			//RoomMap.get( room.getRoomNumber() ).addReservation(R);
 			

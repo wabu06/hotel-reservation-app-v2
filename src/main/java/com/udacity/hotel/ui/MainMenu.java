@@ -8,7 +8,6 @@ public interface MainMenu
 {
 	public MainMenu launch();
 	public void mainMenuManager();
-	String getEmail();
 	void reserveRoom();
 	void displayCustomerReservations();
 	Customer createAccount(String email);
