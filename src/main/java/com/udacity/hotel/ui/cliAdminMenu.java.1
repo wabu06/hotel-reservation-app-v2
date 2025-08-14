@@ -191,50 +191,11 @@ public class cliAdminMenu implements AdminMenu
 			
 			System.out.println("\n" + room + "\n");
 		}
-		
-		public void showRoomReservations()
-		{
-			String roomNumber;
-			
-			while(true)
-			{
-				System.out.print("Please Enter The Room Number: ");
-				roomNumber = cliMainMenu.CLI.nextLine();
-					
-				if( roomNumber.length() > 0 )
-				{
-					if( isRoomNumValid(roomNumber) )
-					{
-						roomNumber = roomNumber.toUpperCase();
-							
-						if( !AR.roomExist(roomNumber) )
-							System.out.println("\nThere is no room with the number: [" + roomNumber + "]\n");
-						else
-							break;
-					}
-					else
-						System.out.println("\n[" + roomNumber + "] Is Not A Valid Room Number\n");
-				}
-			}
-			
-			Collection<Reservation> reserves = AR.getReservationsForRoom(roomNumber);
-			
-			if(reserves.size() == 0)
-			{
-				System.out.println("\nThere Are No Reservations For Room " + roomNumber + "\n");
-				return;
-			}
-			
-			System.out.println("\nThese Are The Reservations For Room: " + roomNumber + "\n");
-			
-			for(Reservation R: reserves)
-				System.out.println("\n" + R + "\n");
-		}
 
 		@Override
 		public void addRooms()
 		{
-			//HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
+			HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
 			String ans, roomNumber, type;
 			Double price;
 
@@ -255,7 +216,7 @@ public class cliAdminMenu implements AdminMenu
 						{
 							roomNumber = roomNumber.toUpperCase();
 							
-							if( AR.roomExist(roomNumber) )
+							if( AR.roomExist(roomNumber) || rooms.containsKey(roomNumber) )
 								System.out.println("\nThere is already a room: [" + roomNumber + "]\n");
 							else
 								break;
@@ -283,27 +244,27 @@ public class cliAdminMenu implements AdminMenu
 
 				while(true)
 				{
-					System.out.print("Enter room type: S for single bed, D for double bed: ");
+					System.out.print("Enter room type: 1 for single bed, 2 for double bed: ");
 					type = cliMainMenu.CLI.nextLine();
 
 					if( type.length() == 0 )
 						continue;
-						
-					if( (type.toUpperCase().compareTo("S") == 0) || (type.toUpperCase().compareTo("D") == 0) )
+
+					if( "1 2".contains(type) )
 						break;
 				}
 
-				if( type.compareTo("S") == 0 )
+				if( type.compareTo("1") == 0 )
 					RT = RoomType.SINGLE;
 				else
 					RT = RoomType.DOUBLE;
 
 				if (price == 0.0)
-					AR.addNewRoom( new FreeRoom(roomNumber, RT) );
+					rooms.put( roomNumber, new FreeRoom(roomNumber, RT) );
 				else
-					AR.addNewRoom( new Room(roomNumber, price, RT) );
+					rooms.put( roomNumber, new Room(roomNumber, price, RT) );
 				
-				System.out.println( "\n" + AR.getRoom(roomNumber) );
+				System.out.println( "\n" + rooms.get(roomNumber) );
 
 				do {
 				
@@ -316,7 +277,7 @@ public class cliAdminMenu implements AdminMenu
 
 			} while( (ans.toLowerCase().compareTo("yes") == 0) || (ans.toLowerCase().compareTo("y") == 0) );
 
-			//AR.addRooms( new ArrayList<IRoom>( rooms.values() ) );
+			AR.addRooms( new ArrayList<IRoom>( rooms.values() ) );
 		}
 		// end addRooms()
 		

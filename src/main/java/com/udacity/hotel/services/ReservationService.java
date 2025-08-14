@@ -132,11 +132,18 @@ public class ReservationService
 			return ReservationMap.get(email);
 		}
 		
-		public Collection<Reservation> getCustomersReservation(Customer customer)
+		public Collection<Reservation> getCustomersReservations(Customer customer)
 			{ return ReservationMap.get( customer.getEmail() ); }
 		
-		Collection<Reservation> getRoomReservations(IRoom room)
-			{ return room.getReservations(); }
+		public Collection<Reservation> getRoomReservations(String rmNum)
+		{
+			IRoom room = RoomMap.get(rmNum);
+			
+			if(room == null)
+				return null;
+			else
+				return room.getReservations();
+		}
 
 		public Collection<Reservation> getAllReservations() {
 			return ReservationMap.values().stream().flatMap( a -> a.stream() ).collect(Collectors.toList());

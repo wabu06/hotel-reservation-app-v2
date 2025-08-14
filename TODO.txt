@@ -11,9 +11,11 @@
 11. Add check in customer option in admin menu
 12. show whether or not a customer ever checked in for a reservation
 *13. fix findRooms for canceled reservations, & display canceled reservations as being canceled
-14. Make it possible to change the cost of a room
+*14. Make it possible to change the cost of a room
 *15. add phone number for customer info
 *16. when showing a reservation the price at which it was orignally booked should be displayed, not the price that might have changed for the room price
+17. Show reservations for a room from admin menu
+18. show all reservations for a customer from admin menu
 
 
 

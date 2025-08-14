@@ -44,7 +44,7 @@ public class HotelResource
 		}
 		
 		public Collection<Reservation> getCustomerReservations(String customerEmail)
-			{ return RS.getCustomersReservation( CS.getCustomer(customerEmail) ); }
+			{ return RS.getCustomersReservations( CS.getCustomer(customerEmail) ); }
 		
 		public HashMap<String, IRoom> findARoom(Date checkIn, Date checkOut)
 			{ return RS.findRooms(checkIn, checkOut); }
