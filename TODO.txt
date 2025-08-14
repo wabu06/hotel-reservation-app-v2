@@ -14,7 +14,7 @@
 *14. Make it possible to change the cost of a room
 *15. add phone number for customer info
 *16. when showing a reservation the price at which it was orignally booked should be displayed, not the price that might have changed for the room price
-17. Show reservations for a room from admin menu
+*17. Show reservations for a room from admin menu
 18. show all reservations for a customer from admin menu
 
 

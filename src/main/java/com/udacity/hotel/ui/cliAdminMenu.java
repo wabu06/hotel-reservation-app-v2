@@ -27,22 +27,52 @@ public class cliAdminMenu implements AdminMenu
 			AR = AdminResource.getInstance();
 		}
 		
-		public boolean isAuthentic()
+//		boolean isAuthentic()
+//		{
+//			String pw; // admin password
+//			
+//			//CLI = new Scanner(System.in);
+//			
+//			int pwHash = -2038048907; // masteryoda, nbtufszpeb, adoyretsam, bepzsfutbn
+//			
+//			System.out.print("Please enter the Admin password: ");
+//			
+//			pw = cliMainMenu.CLI.nextLine();
+//			
+//			if( pwHash == pw.hashCode() )
+//				{ System.out.println(); return true; }
+//			else
+//				{ System.out.println("\nIncorrect Password!!\n"); return false; }
+//		}
+		
+		boolean isAuthentic()
 		{
+			int pwHash = AR.getPasswordHash();
+			
 			String pw; // admin password
 			
-			//CLI = new Scanner(System.in);
-			
-			int pwHash = -2038048907; // masteryoda, nbtufszpeb, adoyretsam, bepzsfutbn
+			if(pwHash == 0)
+			{
+				System.out.print("Please Select An Admin password: ");
+				pw = cliMainMenu.CLI.nextLine();
+				AR.savePasswordHash(pw);
+				System.out.println();
+				return true;
+			}
 			
 			System.out.print("Please enter the Admin password: ");
-			
 			pw = cliMainMenu.CLI.nextLine();
 			
 			if( pwHash == pw.hashCode() )
-				{ System.out.println(); return true; }
+			{
+				System.out.println();
+				return true;
+			}
 			else
-				{ System.out.println("\nIncorrect Password!!\n"); return false; }
+			{
+				System.out.println("\nIncorrect Password!!\n");
+				return false;
+			}
 		}
 		
 		@Override
@@ -87,8 +117,12 @@ public class cliAdminMenu implements AdminMenu
 					case 5:
 						changeRoomPrice();
 					break;
-				
+					
 					case 6:
+						showRoomReservations();
+					break;
+				
+					case 7:
 						//CLI.close();
 						System.out.println(); // return to main menu
 						return;
@@ -194,6 +228,12 @@ public class cliAdminMenu implements AdminMenu
 		
 		public void showRoomReservations()
 		{
+			if(AR.getRoomCount() == 0) {
+				System.out.println("\nNeed To Add Rooms!!\n");
+				return;
+			}
+				
+			
 			String roomNumber;
 			
 			while(true)
@@ -293,7 +333,7 @@ public class cliAdminMenu implements AdminMenu
 						break;
 				}
 
-				if( type.compareTo("S") == 0 )
+				if( type.toUpperCase().compareTo("S") == 0 )
 					RT = RoomType.SINGLE;
 				else
 					RT = RoomType.DOUBLE;
@@ -326,10 +366,10 @@ public class cliAdminMenu implements AdminMenu
 		{
 			String line = "", items, prompt;
 
-			 for(int i = 0; i < 35; i++)
+			 for(int i = 0; i < 45; i++)
 		 		line += "*";
 
-			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tAdd a Room\n5.\tChange A Room's Price Per Night\n6.\tBack to Main Menu\n";
+			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tAdd a Room\n5.\tChange A Room's Price Per Night\n6.\tSee All Reservations For A Room\n7.\tBack to Main Menu\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 
