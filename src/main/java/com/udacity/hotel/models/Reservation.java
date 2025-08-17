@@ -118,11 +118,11 @@ public class Reservation
 		
 			Reservation R = (Reservation) O;
 			
-			return customer.equals(R.customer) && room.equals(R.room) && checkInDate.equals(R.checkInDate) && checkOutDate.equals(R.checkOutDate);
+			return customer.equals(R.customer) && room.equals(R.room) && checkInDate.equals(R.checkInDate) && checkOutDate.equals(R.checkOutDate) && (ID == R.ID) && (staylength == R.staylength) && total.equals(R.total) && (canceled == R.canceled);
 		}
 		
 		@Override
 		public int hashCode() {
-			return Objects.hash(customer, room, checkInDate, checkOutDate);
+			return Objects.hash(Integer.valueOf(ID), customer, room, checkInDate, checkOutDate, Long.valueOf(staylength), total, Boolean.valueOf(canceled));
 		}
 }

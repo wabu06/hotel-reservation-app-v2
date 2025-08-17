@@ -48,11 +48,11 @@ public class Customer
 		
 			Customer C = (Customer) O;
 			
-			return firstName.equals(C.firstName) && lastName.equals(C.lastName) &&  email.equals(C.email) && (pinHash == C.pinHash);
+			return firstName.equals(C.firstName) && lastName.equals(C.lastName) && phone.equals(C.phone) && email.equals(C.email) && (pinHash == C.pinHash);
 		}
 		
 		@Override
 		public int hashCode()
-			{ return Objects.hash(firstName, lastName, email); }
+			{ return Objects.hash(firstName, lastName, phone, email, Long.valueOf(pinHash)); }
 }
 

@@ -76,7 +76,7 @@ public class Room implements IRoom
 		
 			Room R = (Room) O;
 			
-			return roomNumber.equals(R.roomNumber) && price.equals(R.price) && (type == R.type) && RoomReservations.equals(R.RoomReservations);
+			return roomNumber.equals(R.roomNumber) && price.equals(R.price) && (type == R.type); //&& RoomReservations.equals(R.RoomReservations);
 		}
 		
 		@Override
