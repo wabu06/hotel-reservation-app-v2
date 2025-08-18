@@ -5,7 +5,14 @@ import java.util.*;
 
 public class FreeRoom extends Room
 {
-		public FreeRoom(String N, RoomType T) { super(N, 0.0, T); }
+		public FreeRoom(String N, RoomType T) {
+			super(N, 0.0, T);
+		}
+		
+		public FreeRoom(FreeRoom rm) {
+			super(rm.roomNumber, 0.0, rm.type);
+			RoomReservations = null;
+		}
 	
 		@Override 
 		public String toString()

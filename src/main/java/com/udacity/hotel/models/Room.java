@@ -6,9 +6,9 @@ import java.util.*;
 
 public class Room implements IRoom
 {
-		/* protected */ final String roomNumber;
+		/* protected */ String roomNumber;
 		/* protected */ Double price;
-		/* protected */ final RoomType type;
+		/* protected */ RoomType type;
 		
 		ArrayList<Reservation> RoomReservations; // Reservations for the room
 	

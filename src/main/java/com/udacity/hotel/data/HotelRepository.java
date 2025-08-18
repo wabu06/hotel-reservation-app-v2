@@ -3,6 +3,7 @@ package com.udacity.hotel.data;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.ArrayList;
 
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
@@ -13,7 +14,7 @@ public interface HotelRepository
 	Map<String, Customer> updateCustomers(Map<String, Customer> new_customers);
 	Map<String, Customer> getCustomers();
 	
-	//Collection<IRoom> updateRooms(Collection<IRoom> rooms);
+	Collection<IRoom> updateRooms(Collection<IRoom> new_rooms);
 	
-	//Collection<Reservation> updateReservations(Collection<Reservation> reservstions);
+	Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reservations);
 }

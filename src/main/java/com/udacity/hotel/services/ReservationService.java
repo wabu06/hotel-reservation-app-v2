@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 
 import com.udacity.hotel.models.*;
+import com.udacity.hotel.data.*;
 
 
 public class ReservationService
@@ -14,17 +15,24 @@ public class ReservationService
 	 	Map<String, IRoom> RoomMap;
 		Map< String, ArrayList<Reservation> > ReservationMap;
 		
+		PretendDataBaseHotelRepo hotelRepo;
+		
 		final static ReservationService instance = new ReservationService();
 		
 		public static ReservationService getInstance() { return instance; }
 		
 		private ReservationService()
 		{ 
+			hotelRepo = PretendDataBaseHotelRepo.getInstance();
+			
 			RoomMap = new HashMap<String, IRoom>();
 			ReservationMap = new HashMap< String, ArrayList<Reservation> >();
 		}
 		
-		public void addRoom(IRoom room) { RoomMap.put(room.getRoomNumber(), room); }
+		public void addRoom(IRoom room) {
+			RoomMap.put(room.getRoomNumber(), room);
+			hotelRepo.updateRooms(RoomMap.values());
+		}
 		
 		public IRoom getARoom(String roomId) { return RoomMap.get(roomId); }
 		
@@ -86,7 +94,12 @@ public class ReservationService
 			
 			Double totalCost = staylength * room.getRoomPrice();
 			
-			Reservation R = new Reservation(customer, new Room( (Room) room ), staylength, totalCost, checkInDate, checkOutDate);
+			Reservation R;
+			
+			if(room instanceof Room)
+				R = new Reservation(customer, new Room( (Room) room ), staylength, totalCost, checkInDate, checkOutDate);
+			else
+				R = new Reservation(customer, new FreeRoom( (FreeRoom) room ), staylength, totalCost, checkInDate, checkOutDate);
 			
 			//RoomMap.get( room.getRoomNumber() ).addReservation(R);
 			

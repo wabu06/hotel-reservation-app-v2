@@ -4,8 +4,7 @@ import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 
 import java.lang.reflect.Type;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 import java.util.prefs.Preferences;
 
 import com.udacity.hotel.models.*;
@@ -13,6 +12,8 @@ import com.udacity.hotel.models.*;
 public class PretendDataBaseHotelRepo implements HotelRepository
 {
 	Map<String, Customer> customers;
+	List<IRoom> rooms;
+	Map< String, ArrayList<Reservation> > reservations;
 	
 	final static PretendDataBaseHotelRepo instance = new PretendDataBaseHotelRepo();
 	
@@ -41,6 +42,26 @@ public class PretendDataBaseHotelRepo implements HotelRepository
     	Type type = new TypeToken< Map<String, Customer> >() {}.getType();
       customers = gson.fromJson(customerString, type);
     }
+    
+    String roomString = repo_prefs.get(ROOMS, null);
+    
+    if(roomString == null)
+    	rooms = new ArrayList<IRoom>();
+    else
+    {
+    	Type type = new TypeToken< List<IRoom> >() {}.getType();
+      rooms = gson.fromJson(roomString, type);
+    }
+    
+    String reservationString = repo_prefs.get(RESERVATIONS, null);
+    
+    if(reservationString == null)
+    	reservations = new HashMap< String, ArrayList<Reservation> > ();
+    else
+    {
+    	Type type = new TypeToken< Map< String, ArrayList<Reservation> >  >() {}.getType();
+      reservations = gson.fromJson(reservationString, type);
+    }
   }
   
   @Override
@@ -54,4 +75,42 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   public Map<String, Customer> getCustomers() {
  			return customers; 	
   }
+  
+  @Override
+  public Collection<IRoom> updateRooms(Collection<IRoom> new_rooms)
+  {
+  	rooms = new ArrayList<IRoom>();
+  	
+  	for(IRoom rm: new_rooms)
+  	{
+  		if(rm instanceof Room)
+  			rooms.add( new Room( (Room) rm));
+  		else
+  			rooms.add( new FreeRoom( (FreeRoom) rm));
+  	}
+  	
+  	repo_prefs.put(ROOMS, gson.toJson(rooms));
+  	
+  	return new_rooms;
+  }
+  
+  @Override
+  Map<String, IRoom> getRooms()
+  {
+  	if(rooms.isEmpty())
+  		return new HashMap<String, IRoom>();
+  	
+  	return rooms.stream().collect(Collectors.toMap(r -> r.getRoomNumber(), Function.identity()));
+  	
+  }
+  
+  @Override
+	public Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reservations)
+	{
+		repo_prefs.put(RESERVATIONS, gson.toJson(reservations));
+		return reservations;
+	}
 }
+
+
+
