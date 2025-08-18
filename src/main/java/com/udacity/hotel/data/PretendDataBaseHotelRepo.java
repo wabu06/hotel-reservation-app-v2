@@ -7,6 +7,8 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.prefs.Preferences;
 
+import java.util.function.Function;
+
 import com.udacity.hotel.models.*;
 
 public class PretendDataBaseHotelRepo implements HotelRepository
@@ -99,15 +101,27 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   {
   	if(rooms.isEmpty())
   		return new HashMap<String, IRoom>();
-  	
-  	return rooms.stream().collect(Collectors.toMap(r -> r.getRoomNumber(), Function.identity()));
-  	
+  	else
+  	{
+  		for(IRoom rm: rooms)
+  		{
+  			ArrayList<Reservation> reserves = reservations.values().stream().flatMap(res -> res.stream()).filter(res -> res.getRoom().getRoomNumber().compareTo( rm.getRoomNumber() ) == 0).collect(Collectors.toCollection(ArrayList::new))
+  			
+  			rm.setResevations(reserves) // need to implement method
+  		}
+  		return rooms.stream().collect(Collectors.toMap(r -> r.getRoomNumber(), Function.identity()));
+  	}
   }
   
   @Override
 	public Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reservations)
 	{
 		repo_prefs.put(RESERVATIONS, gson.toJson(reservations));
+		return reservations;
+	}
+	
+	@Override
+	public Map< String, ArrayList<Reservation> > getReservations() {
 		return reservations;
 	}
 }
