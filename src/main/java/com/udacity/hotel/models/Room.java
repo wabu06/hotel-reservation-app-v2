@@ -39,7 +39,15 @@ public class Room implements IRoom
 			return price;
 		}
 		
-		public ArrayList<Reservation> getReservations() { return RoomReservations; }
+		public ArrayList<Reservation> getReservations() {
+			return RoomReservations;
+		}
+		
+		public ArrayList<Reservation> setReservations(ArrayList<Reservation> reserves) {
+			RoomReservations = reserves;
+			return RoomReservations;
+		}
+		
 		public void addReservation(Reservation R) { RoomReservations.add(R); }
 		public boolean hasReservations() { return !RoomReservations.isEmpty(); }
 		public int totalReservations() { return RoomReservations.size(); }

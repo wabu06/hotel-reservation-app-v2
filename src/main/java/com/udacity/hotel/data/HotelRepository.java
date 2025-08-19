@@ -15,6 +15,8 @@ public interface HotelRepository
 	Map<String, Customer> getCustomers();
 	
 	Collection<IRoom> updateRooms(Collection<IRoom> new_rooms);
+	Map<String, IRoom> getRooms();
 	
 	Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reservations);
+	Map< String, ArrayList<Reservation> > getReservations();
 }

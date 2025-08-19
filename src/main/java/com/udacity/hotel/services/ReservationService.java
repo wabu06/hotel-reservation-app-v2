@@ -114,6 +114,8 @@ public class ReservationService
 				ReservationMap.put( email, new ArrayList<Reservation>() );
 				ReservationMap.get(email).add(R);
 			}
+			
+			hotelRepo.updateReservations(ReservationMap);
 
 			return R;
 		}

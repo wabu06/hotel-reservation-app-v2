@@ -14,6 +14,8 @@ public interface IRoom
 	public Double setRoomPrice(Double p);
 		
 	public ArrayList<Reservation> getReservations();
+	ArrayList<Reservation> setReservations(ArrayList<Reservation> reserves);
+	
 	public void addReservation(Reservation R);
 	public boolean hasReservations();
 	public int totalReservations();

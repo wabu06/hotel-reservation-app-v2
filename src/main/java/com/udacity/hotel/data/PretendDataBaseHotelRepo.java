@@ -7,6 +7,8 @@ import java.lang.reflect.Type;
 import java.util.*;
 import java.util.prefs.Preferences;
 
+import java.util.stream.Collectors;
+
 import java.util.function.Function;
 
 import com.udacity.hotel.models.*;
@@ -81,23 +83,23 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   @Override
   public Collection<IRoom> updateRooms(Collection<IRoom> new_rooms)
   {
-  	rooms = new ArrayList<IRoom>();
+  	ArrayList<IRoom> db_rooms = new ArrayList<>();
   	
   	for(IRoom rm: new_rooms)
   	{
   		if(rm instanceof Room)
-  			rooms.add( new Room( (Room) rm));
+  			db_rooms.add( new Room( (Room) rm));
   		else
-  			rooms.add( new FreeRoom( (FreeRoom) rm));
+  			db_rooms.add( new FreeRoom( (FreeRoom) rm));
   	}
   	
-  	repo_prefs.put(ROOMS, gson.toJson(rooms));
+  	repo_prefs.put(ROOMS, gson.toJson(db_rooms));
   	
   	return new_rooms;
   }
   
   @Override
-  Map<String, IRoom> getRooms()
+  public Map<String, IRoom> getRooms()
   {
   	if(rooms.isEmpty())
   		return new HashMap<String, IRoom>();
@@ -105,19 +107,21 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   	{
   		for(IRoom rm: rooms)
   		{
-  			ArrayList<Reservation> reserves = reservations.values().stream().flatMap(res -> res.stream()).filter(res -> res.getRoom().getRoomNumber().compareTo( rm.getRoomNumber() ) == 0).collect(Collectors.toCollection(ArrayList::new))
+  			ArrayList<Reservation> reserves = reservations.values().stream().flatMap(res -> res.stream())
+  																														 .filter(res -> res.getRoom().getRoomNumber().compareTo( rm.getRoomNumber() ) == 0)
+  																														 .collect(Collectors.toCollection(ArrayList::new));
   			
-  			rm.setResevations(reserves) // need to implement method
+  			rm.setReservations(reserves);
   		}
   		return rooms.stream().collect(Collectors.toMap(r -> r.getRoomNumber(), Function.identity()));
   	}
   }
   
   @Override
-	public Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reservations)
+	public Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reserves)
 	{
-		repo_prefs.put(RESERVATIONS, gson.toJson(reservations));
-		return reservations;
+		repo_prefs.put(RESERVATIONS, gson.toJson(reserves));
+		return reserves;
 	}
 	
 	@Override
