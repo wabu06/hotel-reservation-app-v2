@@ -4,10 +4,14 @@ package com.udacity.hotel.models;
 import java.util.*;
 //import java.util.regex.*;
 
+import java.util.prefs.Preferences;
+
 
 public class Reservation
 {
-		static int IDcount = 0;
+		static int IDcount;
+		
+		private static final Preferences IDprefs = Preferences.userNodeForPackage(Reservation.class);
 		
 		private int ID;
 		
@@ -24,7 +28,11 @@ public class Reservation
 	
 		public Reservation(Customer C, IRoom R, long SL, Double T, Date cid, Date cod)
 		{
+			IDcount = IDprefs.getInt("ID", 0);
+				
 			ID = ++IDcount;
+			
+			IDprefs.putInt("ID", IDcount);
 			
 			customer = C;
 			room = R;

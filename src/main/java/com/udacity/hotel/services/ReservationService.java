@@ -25,8 +25,11 @@ public class ReservationService
 		{ 
 			hotelRepo = PretendDataBaseHotelRepo.getInstance();
 			
-			RoomMap = new HashMap<String, IRoom>();
-			ReservationMap = new HashMap< String, ArrayList<Reservation> >();
+			//RoomMap = new HashMap<String, IRoom>();
+			RoomMap = hotelRepo.getRooms();
+			
+			//ReservationMap = new HashMap< String, ArrayList<Reservation> >();
+			ReservationMap = hotelRepo.getReservations();
 		}
 		
 		public void addRoom(IRoom room) {

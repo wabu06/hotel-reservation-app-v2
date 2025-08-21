@@ -2,6 +2,7 @@ package com.udacity.hotel.data;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.lang.reflect.Type;
 import java.util.*;
@@ -35,7 +36,10 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   private PretendDataBaseHotelRepo()
   {
   	repo_prefs = Preferences.userNodeForPackage(PretendDataBaseHotelRepo.class);
-  	gson = new Gson();
+  	//gson = new Gson();
+  	
+  	GsonBuilder builder = new GsonBuilder();
+  	gson = builder.registerTypeAdapter(IRoom.class, new IRoomDeserializer()).create();
   	
   	String customerString = repo_prefs.get(CUSTOMERS, null);
   	

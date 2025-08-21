@@ -1,0 +1,33 @@
+package com.udacity.hotel.data;
+
+
+import com.google.gson.*;
+
+import java.lang.reflect.Type;
+
+import com.udacity.hotel.models.*;
+
+
+public class IRoomDeserializer implements JsonDeserializer<IRoom>
+{
+	@Override
+	public IRoom deserialize(JsonElement element, Type type, JsonDeserializationContext context) throws JsonParseException
+	{
+		JsonObject jsonObject = element.getAsJsonObject();
+    JsonPrimitive prim = (JsonPrimitive) jsonObject.get("CLASSNAME");
+    String className = prim.getAsString();
+    Class<?> klass = getObjectClass(className);
+    return context.deserialize(jsonObject.get("DATA"), klass);
+	}
+	
+	Class<?> getObjectClass(String className)
+	{
+		try {
+    	return Class.forName(className);
+    }
+    catch (ClassNotFoundException e) {
+      //e.printStackTrace();
+    	throw new JsonParseException(e.getMessage());
+    }
+  }
+}
