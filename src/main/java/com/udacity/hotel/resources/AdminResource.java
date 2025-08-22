@@ -43,6 +43,10 @@ public class AdminResource
 				RS.addRoom(rm);
 		}
 		
+		public IRoom changeRoomPrice(String roomNumber, Double price) {
+			return RS.changeRoomPrice(roomNumber, price);
+		}
+		
 		public void addNewRoom(IRoom room) {
 			RS.addRoom(room);
 		}

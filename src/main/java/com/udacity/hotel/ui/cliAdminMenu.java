@@ -220,8 +220,9 @@ public class cliAdminMenu implements AdminMenu
 				}
 			}
 			
-			IRoom room = AR.getRoom(roomNumber);
-			room.setRoomPrice(price);
+			//IRoom room = AR.getRoom(roomNumber);
+			//room.setRoomPrice(price);
+			IRoom room = AR.changeRoomPrice(roomNumber, price);
 			
 			System.out.println("\n" + room + "\n");
 		}

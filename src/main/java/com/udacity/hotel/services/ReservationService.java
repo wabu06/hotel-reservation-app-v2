@@ -37,6 +37,16 @@ public class ReservationService
 			hotelRepo.updateRooms(RoomMap.values());
 		}
 		
+		public IRoom changeRoomPrice(String roomNumber, Double price)
+		{
+			IRoom room = RoomMap.get(roomNumber);
+			room.setRoomPrice(price);
+			
+			hotelRepo.updateRooms(RoomMap.values());
+			
+			return room;
+		}
+		
 		public IRoom getARoom(String roomId) { return RoomMap.get(roomId); }
 		
 		public boolean roomExist(String roomId) { return RoomMap.containsKey(roomId); }
@@ -83,6 +93,8 @@ public class ReservationService
 			R.setCheckOutDate(cod);
 			
 			room.addReservation(R);
+			
+			hotelRepo.updateReservations(ReservationMap);
 				
 			return R;
 		}
@@ -187,6 +199,7 @@ public class ReservationService
 			
 			if(RO.isPresent()) {
 				RO.get().cancel();
+				hotelRepo.updateReservations(ReservationMap);
 				return RO;
 			}
 			else
