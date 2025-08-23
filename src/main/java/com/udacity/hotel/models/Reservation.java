@@ -5,6 +5,7 @@ import java.util.*;
 //import java.util.regex.*;
 
 import java.util.prefs.Preferences;
+import java.text.NumberFormat;
 
 
 public class Reservation
@@ -105,7 +106,7 @@ public class Reservation
 		public String toString()
 		{ 
 			String resStr = "Reservation ID: " + ID + "\n" + customer.toString() + "\n" + room.toString();
-			resStr = resStr + "\nLength Of Stay: " + staylength + " nights" + "\nTotal Cost Of Stay: $" + total;
+			resStr = resStr + "\nLength Of Stay: " + staylength + " nights" + "\nTotal Cost Of Stay: " + NumberFormat.getCurrencyInstance().format(total);
 			
 			if(canceled)
 				resStr = resStr + "\nCheck In Date: " + checkInDate.toString() + " (CANCELED)" + "\nCheck Out Date: " + checkOutDate.toString() + " (CANCELED)";
