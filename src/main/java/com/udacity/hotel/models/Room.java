@@ -2,12 +2,35 @@ package com.udacity.hotel.models;
 
 
 import java.util.*;
+import java.util.Properties;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 
 public class Room
 {
 	static Double single_price;
 	static Double double_price;
+	
+	static
+	{
+		Properties props = new Properties();
+		
+		try (InputStream is = getClass().getClassLoader().getResourceAsStream("price.properties")) {
+       props.load(is);
+    }
+    catch (IOException ioe ) {
+       //price.properties not found
+       System.exit(1);
+    }
+    
+    String single = props.getProperty("single.price");
+    String _double = props.getProperty("double.price");
+    
+    single_price = Double.parseDouble(single);
+    double_price = Double.parseDouble("_double");
+	}
 	
 	private String roomNumber;
 	private Double price;
