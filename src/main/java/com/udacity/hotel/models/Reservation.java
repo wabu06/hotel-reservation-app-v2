@@ -17,7 +17,7 @@ public class Reservation
 		private int ID;
 		
 		private Customer customer;
-		private IRoom room;
+		private Room room;
 		
 		private long staylength;
 		private Double total;
@@ -47,7 +47,11 @@ public class Reservation
 			canceled = false;
 		}
 		
-		public IRoom getRoom() {
+		public Customer getCustomer() {
+			return customer;
+		}
+		
+		public Room getRoom() {
 			return room;
 		}
 

@@ -4,92 +4,75 @@ package com.udacity.hotel.models;
 import java.util.*;
 
 
-public class Room implements IRoom
+public class Room
 {
-		/* protected */ String roomNumber;
-		/* protected */ Double price;
-		/* protected */ RoomType type;
-		
-		ArrayList<Reservation> RoomReservations; // Reservations for the room
+	static Double single_price;
+	static Double double_price;
 	
-		public Room(String N, Double P, RoomType T)
-		{
-			roomNumber = N;
-			price = P;
-			type = T;
-			
-			RoomReservations = new ArrayList<Reservation>();
-		}
-		
-		public Room(Room rm)
-		{
-			roomNumber = rm.roomNumber;
-			price = rm.price;
-			type = rm.type;
-			
-			RoomReservations = null;
-		}
+	private String roomNumber;
+	private Double price;
+	private RoomType type;
 	
-		public String getRoomNumber() { return roomNumber; }
-		public Double getRoomPrice() { return price; }
-		public RoomType getRoomType() { return type; }
+	public Room(String N, RoomType T)
+	{
+		roomNumber = N;
+		type = T;
 		
-		public Double setRoomPrice(Double p) {
-			price = p;
-			return price;
-		}
+		if(type == RoomType.SINGLE)
+			price = single_price;
+		else
+			price = double_price;
+	}
 		
-		public ArrayList<Reservation> getReservations() {
-			return RoomReservations;
-		}
-		
-		public ArrayList<Reservation> setReservations(ArrayList<Reservation> reserves) {
-			RoomReservations = reserves;
-			return RoomReservations;
-		}
-		
-		public void addReservation(Reservation R) { RoomReservations.add(R); }
-		public boolean hasReservations() { return !RoomReservations.isEmpty(); }
-		public int totalReservations() { return RoomReservations.size(); }
+	public Room(Room rm)
+	{
+		roomNumber = rm.roomNumber;
+		price = rm.price;
+		type = rm.type;		
+	}
 	
-		public boolean isFree()
-		{
-			if (price == 0.0)
-				return true;
-			else
-				return false;
-		}
+	public Double setRoomPrice()
+	{
+		if(type == RoomType.SINGLE)
+			price = single_price;
+		else
+			price = double_price;
+	}
 	
-		@Override 
-		public String toString()
-		{
-			String RmStr = "Room Number: " + roomNumber + "\nPer Night Price: $" + price + "\nRoom Type: ";
+	public String getRoomNumber() { return roomNumber; }
+	public Double getRoomPrice() { return price; }
+	public RoomType getRoomType() { return type; }
+	
+	@Override 
+	public String toString()
+	{
+		String RmStr = "Room Number: " + roomNumber + "\nPer Night Price: $" + price + "\nRoom Type: ";
 		
-			if (type ==  RoomType.SINGLE)
-				RmStr += "SINGLE";
-			else
-				RmStr += "DOUBLE";
+		if (type ==  RoomType.SINGLE)
+			RmStr += "SINGLE";
+		else
+			RmStr += "DOUBLE";
 		
-			return RmStr;
-		}
+		return RmStr;
+	}
 		
-		@Override 
-		public boolean equals(Object O)
-		{
-			if (O == this)
-				return true;
+	@Override 
+	public boolean equals(Object O)
+	{
+		if (O == this)
+			return true;
 			
-			if( !(O instanceof Room) )
-				return false;
+		if( !(O instanceof Room) )
+			return false;
 		
-			Room R = (Room) O;
+		Room R = (Room) O;
 			
-			return roomNumber.equals(R.roomNumber) && price.equals(R.price) && (type == R.type); //&& RoomReservations.equals(R.RoomReservations);
-		}
+		return roomNumber.equals(R.roomNumber) && price.equals(R.price) && (type == R.type); //&& RoomReservations.equals(R.RoomReservations);
+	}
 		
-		@Override
-		public int hashCode() {
-			return Objects.hash(roomNumber, price, type);
-		}
+	@Override
+	public int hashCode() {
+		return Objects.hash(roomNumber, price, type);
+	}
 }
 
