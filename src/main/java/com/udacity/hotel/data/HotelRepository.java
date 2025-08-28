@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.ArrayList;
 
 import com.udacity.hotel.models.*;
-import com.udacity.hotel.services.*;
+//import com.udacity.hotel.services.*;
 
 
 public interface HotelRepository
@@ -14,9 +14,9 @@ public interface HotelRepository
 	Map<String, Customer> updateCustomers(Map<String, Customer> new_customers);
 	Map<String, Customer> getCustomers();
 	
-	Collection<IRoom> updateRooms(Collection<IRoom> new_rooms);
-	Map<String, IRoom> getRooms();
+	Map< String, ArrayList<Reservation> > getSingles();
+	void updateSingles(Map< String, ArrayList<Reservation> > singles);
 	
-	Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reservations);
-	Map< String, ArrayList<Reservation> > getReservations();
+	Map< String, ArrayList<Reservation> > getDoubles();
+	void updateDoubles(Map< String, ArrayList<Reservation> > doubles);
 }

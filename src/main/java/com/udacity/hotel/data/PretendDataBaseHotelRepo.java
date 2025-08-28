@@ -17,17 +17,17 @@ import com.udacity.hotel.models.*;
 public class PretendDataBaseHotelRepo implements HotelRepository
 {
 	Map<String, Customer> customers;
-	List<IRoom> rooms;
-	Map< String, ArrayList<Reservation> > reservations;
+	Map< String, ArrayList<Reservation> > singles;
+	Map< String, ArrayList<Reservation> > doubles;
 	
 	final static PretendDataBaseHotelRepo instance = new PretendDataBaseHotelRepo();
 	
 	public static PretendDataBaseHotelRepo getInstance() { return instance; }
 	
 		//preference keys
-  private static final String CUSTOMERS = "CUSTOMERS_TEST";
-  private static final String ROOMS = "ROOMS_TEST";
-  private static final String RESERVATIONS = "RESERVATIONS_TEST";
+  private static final String CUSTOMERS = "CUSTOMERS"
+  private static final String SINGLES = "SINGLES";
+  private static final String DOUBLES = "DOUBLES";
 
   //private static final Preferences repo_prefs = Preferences.userNodeForPackage(PretendDataBaseHotelRepo.class);
   private Preferences repo_prefs;
@@ -36,10 +36,10 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   private PretendDataBaseHotelRepo()
   {
   	repo_prefs = Preferences.userNodeForPackage(PretendDataBaseHotelRepo.class);
-  	//gson = new Gson();
+  	gson = new Gson();
   	
-  	GsonBuilder builder = new GsonBuilder();
-  	gson = builder.registerTypeAdapter(IRoom.class, new IRoomDeserializer()).create();
+  	//GsonBuilder builder = new GsonBuilder();
+  	//gson = builder.registerTypeAdapter(IRoom.class, new IRoomDeserializer()).create();
   	
   	String customerString = repo_prefs.get(CUSTOMERS, null);
   	
@@ -50,25 +50,25 @@ public class PretendDataBaseHotelRepo implements HotelRepository
     	Type type = new TypeToken< Map<String, Customer> >() {}.getType();
       customers = gson.fromJson(customerString, type);
     }
-    
-    String roomString = repo_prefs.get(ROOMS, null);
-    
-    if(roomString == null)
-    	rooms = new ArrayList<IRoom>();
+  	
+  	String singlesString = repo_prefs.get(SINGLES, null);
+  	
+    if(singlesString == null)
+    	singles = new HashMap< String, ArrayList<Reservation> >();
     else
     {
-    	Type type = new TypeToken< List<IRoom> >() {}.getType();
-      rooms = gson.fromJson(roomString, type);
+    	Type type = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
+      singles = gson.fromJson(singlesString, type);
     }
     
-    String reservationString = repo_prefs.get(RESERVATIONS, null);
+    String doublesString = repo_prefs.get(DOUBLES, null);
     
-    if(reservationString == null)
-    	reservations = new HashMap< String, ArrayList<Reservation> > ();
+    if(doublesString == null)
+    	doubles = new HashMap< String, ArrayList<Reservation> >();
     else
     {
-    	Type type = new TypeToken< Map< String, ArrayList<Reservation> >  >() {}.getType();
-      reservations = gson.fromJson(reservationString, type);
+    	Type type = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
+      doubles = gson.fromJson(doublesString, type);
     }
   }
   
@@ -85,54 +85,23 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   }
   
   @Override
-  public Collection<IRoom> updateRooms(Collection<IRoom> new_rooms)
-  {
-  	ArrayList<IRoom> db_rooms = new ArrayList<>();
-  	
-  	for(IRoom rm: new_rooms)
-  	{
-  		if(rm instanceof Room)
-  			db_rooms.add( new Room( (Room) rm));
-  		else
-  			db_rooms.add( new FreeRoom( (FreeRoom) rm));
-  	}
-  	
-  	repo_prefs.put(ROOMS, gson.toJson(db_rooms));
-  	
-  	return new_rooms;
+  Map< String, ArrayList<Reservation> > getSingles() {
+  	return singles;
   }
   
   @Override
-  public Map<String, IRoom> getRooms()
-  {
-  	if(rooms.isEmpty())
-  		return new HashMap<String, IRoom>();
-  	else
-  	{
-  		for(IRoom rm: rooms)
-  		{
-  			ArrayList<Reservation> reserves = reservations.values().stream().flatMap(res -> res.stream())
-  																														 .filter(res -> res.getRoom().getRoomNumber().compareTo( rm.getRoomNumber() ) == 0)
-  																														 .collect(Collectors.toCollection(ArrayList::new));
-  			
-  			rm.setReservations(reserves);
-  		}
-  		return rooms.stream().collect(Collectors.toMap(r -> r.getRoomNumber(), Function.identity()));
-  	}
+  Map< String, ArrayList<Reservation> > getDoubles() {
+  	return doubles;
   }
   
   @Override
-	public Map< String, ArrayList<Reservation> > updateReservations(Map< String, ArrayList<Reservation> > reserves)
-	{
-		repo_prefs.put(RESERVATIONS, gson.toJson(reserves));
-		return reserves;
-	}
-	
-	@Override
-	public Map< String, ArrayList<Reservation> > getReservations() {
-		return reservations;
-	}
+  void updateSingles(Map< String, ArrayList<Reservation> > singles) {
+  	repo_prefs.put(SINGLES, gson.toJson(singles))
+  }
+  
+  @Override
+  void updateDoubles(Map< String, ArrayList<Reservation> > doubles) {
+		repo_prefs.put(DOUBLES, gson.toJson(doubles))  
+  }
 }
-
-
 
