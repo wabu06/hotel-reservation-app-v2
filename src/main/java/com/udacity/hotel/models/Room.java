@@ -3,6 +3,7 @@ package com.udacity.hotel.models;
 
 import java.util.*;
 import java.util.Properties;
+import java.util.prefs.Preferences;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -10,6 +11,8 @@ import java.io.InputStream;
 
 public class Room
 {
+	private static Preferences price_prefs
+	
 	static Double single_price;
 	static Double double_price;
 	
@@ -25,11 +28,13 @@ public class Room
        System.exit(1);
     }
     
-    String single = props.getProperty("single.price");
-    String _double = props.getProperty("double.price");
+    Double single = Double.parseDouble( props.getProperty("single.price") );
+    Double _double = Double.parseDouble( props.getProperty("double.price") );
     
-    single_price = Double.parseDouble(single);
-    double_price = Double.parseDouble("_double");
+    price_prefs = Preferences.userNodeForPackage(Room.class);
+    
+    single_price = price_prefs.getDouble("SINGLES", single);
+    double_price = price_prefs.getDouble("DOUBLES", _double);
 	}
 	
 	private String roomNumber;
@@ -52,6 +57,15 @@ public class Room
 		roomNumber = rm.roomNumber;
 		price = rm.price;
 		type = rm.type;		
+	}
+	
+	public static void setSinglePrice(Double p) {
+		single_price = p;
+		price_prefs.putDouble("SINGLES", single_price);
+	}
+	public static void setDoublePrice(Double p) {
+		double_price = p;
+		price_prefs.putDouble("DOUBLES", double_price);
 	}
 	
 	public Double setRoomPrice()

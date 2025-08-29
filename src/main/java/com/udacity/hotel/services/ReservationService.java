@@ -6,6 +6,7 @@ import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.concurrent.TimeUnit;
 
+//import java.util.Properties;
 
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.data.*;
@@ -13,6 +14,8 @@ import com.udacity.hotel.data.*;
 
 public class ReservationService
 {
+	 	Random rng;
+	 	
 	 	Map<String, Room> rooms;
 		
 		Map< String, ArrayList<Reservation> > singles;
@@ -26,19 +29,72 @@ public class ReservationService
 		
 		private ReservationService()
 		{ 
-			hotelRepo = PretendDataBaseHotelRepo.getInstance();
+			rng = new Random();
 			
-			rooms = hotelRepo.getRooms();
+			hotelRepo = PretendDataBaseHotelRepo.getInstance();
 			
 			singles = hotelRepo.getSingles();
 			doubles = hotelRepo.getDoubles();
+			
+			addRooms();
 		}
+		
+		private RoomType getRoomType()
+		{
+			if(rng.nextBoolean())
+				return RoomType.DOUBLE;
+			else
+				return RoomType.SINGLE;
+		}
+		
+		private void addRooms()
+		{
+			Properties props = new Properties();
+		
+			try (InputStream is = getClass().getClassLoader().getResourceAsStream("rooms.properties")) {
+      	props.load(is);
+    	}
+    	catch (IOException ioe ) {
+       	//price.properties not found
+       	System.exit(1);
+    	}
+    	
+    	Integer rpf = Integer.parseInt( prop.getProperty("rooms.per.floor") );
+    	Integer floors = Integer.parseInt( prop.getProperty("floors") );
+    	
+    	rooms = new HashMap<String, Room>();
+    	
+    	for(int f = 2; f <= floors; f++)
+    	{
+    		for(int r = 1; r <= rpf; r++)
+    		{
+    			String roomID = String.valueOf(100*f + r);
+    			
+    			if(singles.get(roomID) != null) {
+    				rooms.put(roomID, new Room(roomID, RoomType.SINGLE));
+    				break;
+    			}
+    			
+    			if(doubles.get(roomID) != null) {
+    				rooms.put(roomID, new Room(roomID, RoomType.DOUBLE));
+    				break;
+    			}
+    			
+    			RoomType type = getRoomType();
+    			
+    			rooms.put(roomID, new Room(roomID, type));
+    			
+    			if(type == RoomType.SINGLE)
+    				singles.put(roomID, new ArrayList<Reservation>());
+    			else
+    				doubles.put(roomID, new ArrayList<Reservation>());
+    		}
+    	}
+    }
 		
 		public void addRoom(Room room)
 		{
 			rooms.put(room.getRoomNumber(), room);
-			
-			hotelRepo.updateRooms(rooms);
 			
 			if(room.getRoomType() == RoomType.SINGLE) {
 				singles.put(room.getRoomNumber(), new ArrayList<Reservation>());
@@ -50,7 +106,7 @@ public class ReservationService
 			}
 		}
 		
-		public Room getARoom(String roomId) { return roomId.get(roomId); }
+		public Room getARoom(String roomId) { return rooms.get(roomId); }
 		
 		public boolean roomExist(String roomId) { return rooms.containsKey(roomId); }
 		
