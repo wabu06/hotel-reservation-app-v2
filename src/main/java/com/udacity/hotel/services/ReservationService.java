@@ -106,7 +106,9 @@ public class ReservationService
 			}
 		}
 		
-		public Room getARoom(String roomId) { return rooms.get(roomId); }
+		public Room getARoom(String roomId) {
+			return rooms.get(roomId);
+		}
 		
 		public boolean roomExist(String roomId) { return rooms.containsKey(roomId); }
 		
@@ -273,6 +275,8 @@ public class ReservationService
 			
 			reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
 			
+			//reservations = reservations.filter(r -> !r.isCanceled());
+			
 			return reservations.toList();
 		}
 		
@@ -283,6 +287,8 @@ public class ReservationService
 			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values.stream().flatMap(r -> r.stream()));
 			
 			reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
+			
+			//reservations = reservations.filter(r -> !r.isCanceled());
 	
 			return reservations.toList();
 		}
@@ -307,15 +313,15 @@ public class ReservationService
 		
 		public Collection<Reservation> getNonCanceledReservations(String email)
 		{
-			if( ReservationMap.get(email) == null )
-				return List.of();
-			else	
-				return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
+			Collection<Reservation> reservations = getCustomerReservations(email)
+			return reservations.stream().filter(r -> !r.isCanceled()).toList();
+			
+				//return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
 		}
 		
-		public Optional<Reservation> getReservationByID(String email, int ID)
+		public Optional<Reservation> getReservationByID(Reservation reserves, int ID)
 		{
-			Optional<Reservation> RO = ReservationMap.get(email).stream().filter( r -> r.getID() == ID).findFirst();
+			Optional<Reservation> RO = reserves.stream().filter( r -> r.getID() == ID).findAny();
 			return RO;
 		}
 		

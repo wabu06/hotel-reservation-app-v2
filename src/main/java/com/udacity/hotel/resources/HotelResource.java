@@ -30,43 +30,47 @@ public class HotelResource
 		public Customer createACustomer(String number, String  email,  String firstName, String lastName, long pinHash)
 			{ return CS.addCustomer(number, email, firstName, lastName, pinHash); }
 		
-		public IRoom getRoom(String roomNumber) { return RS.getARoom(roomNumber); }
-		
-		public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date CheckOutDate)
-			{ return RS.reserveARoom( CS.getCustomer(customerEmail), room, checkInDate, CheckOutDate ); }
-		
-		public Collection<Reservation> getAllCustomerReservations(String customerEmail) {
-			return RS.getCustomerReservations(customerEmail);
+		public Room getRoom(String roomNumber) {
+			return RS.getARoom(roomNumber);
 		}
 		
-		public Optional<Reservation> getReservationByID(String email, int ID) {
-			return RS.getReservationByID(email, ID);
+		public Reservation bookRoom(String email, Room room, Date checkInDate, Date CheckOutDate) {
+			return RS.reserveARoom( CS.getCustomer(email), room, checkInDate, CheckOutDate );
 		}
 		
-		public Collection<Reservation> getCustomerReservations(String customerEmail)
-			{ return RS.getCustomersReservations( CS.getCustomer(customerEmail) ); }
+		public Collection<Reservation> getAllCustomerReservations(String email) {
+			return RS.getCustomerReservations(email);
+		}
 		
-		public HashMap<String, IRoom> findARoom(Date checkIn, Date checkOut)
-			{ return RS.findRooms(checkIn, checkOut); }
+		public Optional<Reservation> getReservationByID(Reservation reserves, int ID) {
+			return RS.getReservationByID(reserves, ID);
+		}
+		
+		//public Collection<Reservation> getCustomerReservations(String customerEmail)
+			//{ return RS.getCustomersReservations( CS.getCustomer(customerEmail) ); }
+		
+		public Room findRoom(Date checkIn, Date checkOut, RoomType type) {
+			return RS.findRoom(checkIn, checkOut, type);
+		}
 			
 		public int getRoomCount() {
 			return RS.getRoomCount();
 		}
 		
-		public Reservation removeRoomReservation(Reservation reservation) {
-			return RS.removeReservationFromRoom(reservation);
+		public Reservation removeReservation(Reservation reservation) {
+			return RS.removeReservation(reservation);
 		}
 		
-		public Reservation restoreRoomReservation(Reservation R) {
-			return RS.restoreReservationToRoom(R);
+		public Reservation restoreReservation(Reservation R) {
+			return RS.restoreReservation(R);
 		}
 		
 		public Reservation changeReservation(Reservation R, String rm, Date cid, Date cod) {
-			return RS.changeReservationRoom(R, rm, cid, cod);
+			return RS.changeReservation(R, rm, cid, cod);
 		}
 		
-		public HashMap<String, IRoom> recommendedRooms(Date cid, Date cod)
-		{
+//		public HashMap<String, IRoom> recommendedRooms(Date cid, Date cod)
+//		{
 //			Calendar cal = Calendar.getInstance();
 //						
 //			cal.setTime(cid);
@@ -76,9 +80,9 @@ public class HotelResource
 //			cal.setTime(cod);
 //			cal.add(Calendar.DAY_OF_MONTH, 7);
 //			cod = cal.getTime();
-			
-			return findARoom(cid, cod);
-		}
+//			
+//			return findARoom(cid, cod);
+//		}
 		 
 		public Collection<Reservation> getNonCanceledReservations(String email) {
 			return RS.getNonCanceledReservations(email);

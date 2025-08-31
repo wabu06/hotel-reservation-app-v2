@@ -134,7 +134,7 @@ public class cliMainMenu implements MainMenu
 			if(email == null)
 				return;
 			
-			Collection<Reservation> reserves = HR.getCustomerReservations(email);
+			Collection<Reservation> reserves = HR.getAllCustomerReservations(email);
 			
 			if (reserves == null)
 				System.out.println("\nYou Have No Reservations\n");
@@ -224,19 +224,12 @@ public class cliMainMenu implements MainMenu
 		
 		ResInfo searchForRooms()
 		{
-			String ans;
-			
-			String cidStr, codStr; // check IN/OUT dates, as entered by user
+			String cidEntry, codEntry; // check IN/OUT dates, as entered by user
 			
 			Date cid = null;
 			Date cod = null; // check IN/OUT dates
 			
-			//Calendar cal;
-			
-			HashMap<String, IRoom> rooms;
-			String rm = "";
-			
-			ResInfo RI;
+			ResInfo RI = null;
 			
 			while(true)
 			{
@@ -245,8 +238,8 @@ public class cliMainMenu implements MainMenu
 					try
 					{
 						System.out.print("\nPlease enter your check in date as (mm/dd/yyy): ");
-						cidStr = CLI.nextLine();
-						cid = getDateInstance(cidStr, 11);
+						cidEntry = CLI.nextLine();
+						cid = getDateInstance(cidEntry, 11);
 						break;
 					}
 					catch(Exception ex)
@@ -258,113 +251,54 @@ public class cliMainMenu implements MainMenu
 					try
 					{
 						System.out.print("\nPlease enter your check out date as (mm/dd/yyy): ");
-						codStr = CLI.nextLine();
-						cod = getDateInstance(codStr, 15);
+						codEntry = CLI.nextLine();
+						cod = getDateInstance(codEntry, 15);
 						break;
 					}
 					catch(Exception ex)
 						{ System.out.println("\n" + ex.getMessage() ); }
 				}
-			
+
+				Room room;
+				
+				String typeEntry;
+				RoomType type;
+							
 				if( !cid.before(cod) )
 					System.out.println("\nThe check in date must precede the check out date!!");
 				else
 				{
-					rooms = HR.findARoom(cid, cod); 
-					
-					if (rooms.size() == 0)
+					do
 					{
-						Calendar cal = Calendar.getInstance();
-						
-						cal.setTime(cid);
-						cal.add(Calendar.DAY_OF_MONTH, 7);
-						cid = cal.getTime();
-						
-						cal.setTime(cod);
-						cal.add(Calendar.DAY_OF_MONTH, 7);
-						cod = cal.getTime();
-						
-						rooms = HR.recommendedRooms(cid, cod); // bug, not the updated cid & cod, made temp fix
-						
-						if( rooms.size() > 0 )
-						{
-							System.out.println("\nThere are no rooms available for the check in/out dates entered, so the following is being recommended:\n");
-							
-							for(IRoom R: rooms.values() )
-								System.out.println(R + "\n");
-							
-							System.out.print("\nWould you like to select from the recommendations?(Y/n) ");
-							ans = CLI.nextLine();
-							
-							if( ans.toLowerCase().equals("n") || ans.toLowerCase().equals("no") )
-							{
-								System.out.print("Would you like try again with different check in/out dates?(Y/n) ");
-								ans = CLI.nextLine();
-								
-								if( ans.toLowerCase().equals("n") || ans.toLowerCase().equals("no") )
-								{
-									System.out.println("\n");
-									RI = null;
-									break;
-								}
-								else
-									continue;
-							}
-							
-							System.out.print("\nPlease select by entering a room number from above: ");
-							rm = CLI.nextLine(); rm = rm.toUpperCase();
-							
-							while( !rooms.containsKey(rm) )
-							{
-								System.out.println("\n[" + rm + "] is not a valid choice, the rooms available are as follows:\n");
-
-								for(IRoom R: rooms.values() )
-									System.out.println(R + "\n");
-
-								System.out.print("\nPlease select by entering a room number from above: ");
-								rm = CLI.nextLine(); rm = rm.toUpperCase();
-							} 
-							
-							RI = new ResInfo(rm, cid, cod);
-							//System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
-							break;
-						}
-						else // no recommended rooms
-						{
-							System.out.print("\nSorry there are no rooms available, Would you like try again with different check in/out dates?(Y/n) ");
-							ans = CLI.nextLine();
-						
-							if( (ans.toLowerCase().compareTo("n") == 0) || (ans.toLowerCase().compareTo("no") == 0) )
-							{
-								System.out.println("\n"); 
-								RI = null;
-								break;
-							}
-						}
+						System.out.print("Select Room Type as, D for Double, S for Single: ");
+						typeEntry = CLI.nextLine();
 					}
-					// if room size = 0					
+					while( (typeEntry.toUpperCase().compareTo("S") != 0) && (typeEntry.toUpperCase().compareTo("D") != 0) );
+					
+					if(typeEntry.toUpperCase().compareTo("S") == 0)
+						type = RoomType.SINGLE;
+					else
+						type = RoomType.DOUBLE;
+					
+					room = HR.findRoom(cid, cod, type); 
+					
+					if(room == null)
+					{
+						String ans;
+						
+						System.out.println("\nThere are no rooms available for the check in/out dates entered, would you like to try again?(Y/n) ");
+						ans = CLI.nextLine();
+						
+						if( ans.toLowerCase().equals("n") || ans.toLowerCase().equals("no") )
+							break;
+					}
 					else
 					{
-						do {
-				
-							System.out.println("\nRooms available are:\n");
-				
-							for(IRoom R: rooms.values() )
-								System.out.println(R + "\n");
-
-							System.out.print("\nPlease select by entering a room number from above: ");
-							rm = CLI.nextLine(); rm = rm.toUpperCase();
-				
-						} while( !rooms.containsKey(rm) );
-				
-						RI = new ResInfo(rm, cid, cod);
-						//System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
-						break; 
+						RI = new ResInfo(room.getRoomNumber(), cid, cod);
+						break;
 					}
 				}
-				// end outer else
-			}
-			// end of outermost while
+					
 			return RI; //new ResInfo(rm, cid, cod);
 		}
 		
@@ -375,7 +309,7 @@ public class cliMainMenu implements MainMenu
 			if(email == null)
 				return;
 			
-			Collection<Reservation> reserves = HR.getAllCustomerReservations(email);
+			Collection<Reservation> reserves = HR.getNonCanceledReservations(email);
 			
 			if(reserves == null) {
 				System.out.println("\nYou Have No Reservations\n");
@@ -403,7 +337,7 @@ public class cliMainMenu implements MainMenu
 					continue;
 				}
 				
-				RO = HR.getReservationByID(email, ID);
+				RO = HR.getReservationByID(reserves, ID);
 				
 				if(RO.isEmpty()) {
 					System.out.println("\nThere's No Reservation With ID Entered!!\n");
@@ -416,12 +350,12 @@ public class cliMainMenu implements MainMenu
 			
 			Reservation reservation = RO.get();
 			
-			HR.removeRoomReservation(reservation);
+			HR.removeReservation(reservation);
 			
 			ResInfo RI = searchForRooms();
 			
 			if(RI == null) { // need to add back removed reservation to room
-				HR.restoreRoomReservation(reservation);
+				HR.restoreReservation(reservation);
 				return;
 			}
 			
@@ -436,11 +370,6 @@ public class cliMainMenu implements MainMenu
 		@Override
 		public void reserveRoom()
 		{
-			if(HR.getRoomCount() == 0) {
-				System.out.println("\nThere Are No Rooms To Reserve Yet!!\n");
-				return;
-			}
-		
 			String email = getEmail();
 			
 			Customer C = HR.getCustomer(email);
@@ -465,7 +394,7 @@ public class cliMainMenu implements MainMenu
 			Date cid = RI.getCheckInDate();
 			Date cod = RI.getCheckOutDate();
 			
-			System.out.println( "\n" + HR.bookARoom(email, HR.getRoom(rm), cid, cod) + "\n");
+			System.out.println( "\n" + HR.bookRoom(email, HR.getRoom(rm), cid, cod) + "\n");
 		}
 		// end of reserveRoom()
 

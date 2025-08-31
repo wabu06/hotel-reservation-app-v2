@@ -1,5 +1,3 @@
-// HotelApplication.java
-
 /**
  * @title Hotel Reservation Application
  *
@@ -16,26 +14,19 @@ import javafx.application.Application;
 import com.udacity.hotel.ui.*;
 
 
-public class HotelApplication
+public class HotelReservationApp
 {
 	public static void main(String[] args)
 	{
-		//MainMenu mm;
-		
 		if(args.length == 1)
 		{
 			if( args[0].toLowerCase().equals("gui") )
-				//guiMainMenu.getInstance();
 				Application.launch(HotelMenuGui.class, args);
 			else
-			cliMainMenu.getInstance().launch().mainMenuManager();
+				cliMainMenu.getInstance().launch().mainMenuManager();
 		}
 		else
 			cliMainMenu.getInstance().launch().mainMenuManager();
-		
-		//mm.launch().mainMenuManager();
-		
-		//MainMenu.launch().mainMenuManager();
 	}
 }
 

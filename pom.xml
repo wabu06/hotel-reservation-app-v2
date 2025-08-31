@@ -8,11 +8,7 @@
   <artifactId>wabu-hotel-reservations</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
-  <name>HotelApplication</name>
-
-  <!-- FIXME change it to the project's website
-
-  <url>https://github.com/wabu06/HotelReservationApplication1</url> -->
+  <name>HotelReservationApp</name>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -108,7 +104,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        com.udacity.hotel.HotelApplication
+                                        com.udacity.hotel.HotelReservationApp
                                     </mainClass>
                                 </manifest>
                             </archive>
