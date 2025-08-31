@@ -8,9 +8,9 @@ public interface AdminMenu
 {
 	void adminMenuManager();
 	void displayAllCustomers();
-	Collection<IRoom> displayAllRooms();
-	void changeRoomPrice();
+	void displayAllRooms();
+	void changePriceForSingles();
+	void changePriceForDoubles();
 	void displayAllReservations();
-	void addRooms();
 }
 

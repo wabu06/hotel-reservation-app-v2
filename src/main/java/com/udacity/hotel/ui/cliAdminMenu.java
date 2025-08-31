@@ -27,24 +27,6 @@ public class cliAdminMenu implements AdminMenu
 			AR = AdminResource.getInstance();
 		}
 		
-//		boolean isAuthentic()
-//		{
-//			String pw; // admin password
-//			
-//			//CLI = new Scanner(System.in);
-//			
-//			int pwHash = -2038048907; // masteryoda, nbtufszpeb, adoyretsam, bepzsfutbn
-//			
-//			System.out.print("Please enter the Admin password: ");
-//			
-//			pw = cliMainMenu.CLI.nextLine();
-//			
-//			if( pwHash == pw.hashCode() )
-//				{ System.out.println(); return true; }
-//			else
-//				{ System.out.println("\nIncorrect Password!!\n"); return false; }
-//		}
-		
 		boolean isAuthentic()
 		{
 			int pwHash = AR.getPasswordHash();
@@ -106,24 +88,21 @@ public class cliAdminMenu implements AdminMenu
 				
 					case 3:
 						displayAllReservations();
-						//AR.displayAllReservations();
-						//System.out.println("\n");
 					break;
 				
 					case 4:
-						addRooms();
+						changePriceForSingles();
 					break;
 				
 					case 5:
-						changeRoomPrice();
+						changePriceForDoubles();
 					break;
 					
 					case 6:
-						showRoomReservations();
+						displayRoomReservations();
 					break;
 				
 					case 7:
-						//CLI.close();
 						System.out.println(); // return to main menu
 						return;
 				
@@ -151,58 +130,18 @@ public class cliAdminMenu implements AdminMenu
 		}
 		
 		@Override
-		public Collection<IRoom> displayAllRooms()
+		public void displayAllRooms()
 		{
-			Collection<IRoom> rooms = AR.getAllRooms();
-			
-			if (rooms.size() == 0) {
-				System.out.println("\nNeed To Add Rooms!!\n");
-				return null;
-			}
-			else
-			{
-				//System.out.println("\nHotel Rooms Listing");
+			Collection<Room> rooms = AR.getAllRooms();
 
-				for(IRoom R: rooms)
-					System.out.println("\n" + R + "\n");
+			for(IRoom R: rooms)
+				System.out.println("\n" + R + "\n");
 			
-				System.out.println();
-				
-				return rooms;
-			}
+			System.out.println();
 		}
 		
-		@Override
-		public void changeRoomPrice()
+		Double getPrice()
 		{
-			Collection<IRoom> rooms = displayAllRooms();
-			
-			if(rooms == null)
-				return;
-		
-			String roomNumber;
-			
-			while(true)
-			{
-				System.out.print("Enter The Room Number For Which The Price Is Be Changed: ");
-				roomNumber = cliMainMenu.CLI.nextLine();
-					
-				if( roomNumber.length() > 0 )
-				{
-					if( isRoomNumValid(roomNumber) )
-					{
-						roomNumber = roomNumber.toUpperCase();
-							
-						if( !AR.roomExist(roomNumber) )
-							System.out.println("\nThere is no room with the number: [" + roomNumber + "]\n");
-						else
-							break;
-					}
-					else
-						System.out.println("\n[" + roomNumber + "] Is Not A Valid Room Number\n");
-				}
-			}
-			
 			Double price;
 			
 			while(true)
@@ -220,21 +159,23 @@ public class cliAdminMenu implements AdminMenu
 				}
 			}
 			
-			//IRoom room = AR.getRoom(roomNumber);
-			//room.setRoomPrice(price);
-			IRoom room = AR.changeRoomPrice(roomNumber, price);
-			
-			System.out.println("\n" + room + "\n");
+			return price;
 		}
 		
-		public void showRoomReservations()
+		@Override
+		public void changePriceForSingles()
 		{
-			if(AR.getRoomCount() == 0) {
-				System.out.println("\nNeed To Add Rooms!!\n");
-				return;
-			}
-				
-			
+			AR.changePriceForRooms(getPrice(), RoomType.SINGLE);
+		} // end price change
+		
+		@Override
+		public void changePriceForDoubles()
+		{
+			AR.changePriceForRooms(getPrice(), RoomType.DOUBLE);
+		} // end price change
+		
+		public void displayRoomReservations()
+		{
 			String roomNumber;
 			
 			while(true)
@@ -258,7 +199,7 @@ public class cliAdminMenu implements AdminMenu
 				}
 			}
 			
-			Collection<Reservation> reserves = AR.getReservationsForRoom(roomNumber);
+			Collection<Reservation> reserves = AR.getRoomReservations(roomNumber);
 			
 			if(reserves.size() == 0)
 			{
@@ -271,97 +212,7 @@ public class cliAdminMenu implements AdminMenu
 			for(Reservation R: reserves)
 				System.out.println("\n" + R + "\n");
 		}
-
-		@Override
-		public void addRooms()
-		{
-			//HashMap<String, IRoom> rooms = new HashMap<String, IRoom>();
-			String ans, roomNumber, type;
-			Double price;
-
-			RoomType RT;
-
-			System.out.println();
-
-			do {
-
-				while(true)
-				{
-					System.out.print("Enter room number: ");
-					roomNumber = cliMainMenu.CLI.nextLine();
-					
-					if( roomNumber.length() > 0 )
-					{
-						if( isRoomNumValid(roomNumber) )
-						{
-							roomNumber = roomNumber.toUpperCase();
-							
-							if( AR.roomExist(roomNumber) )
-								System.out.println("\nThere is already a room: [" + roomNumber + "]\n");
-							else
-								break;
-						}
-						else
-							System.out.println("\n[" + roomNumber + "] Is Not A Valid Room Number\n");
-					}
-				}
-
-				while(true)
-				{
-					try
-					{	
-						System.out.print("Enter price per night: ");
-						price = Double.valueOf( cliMainMenu.CLI.nextLine() );
-						break;
-					}
-
-					catch(Exception ex)
-					{
-						System.out.println("\nInvalid Input!!\n");
-						continue;
-					}
-				}
-
-				while(true)
-				{
-					System.out.print("Enter room type: S for single bed, D for double bed: ");
-					type = cliMainMenu.CLI.nextLine();
-
-					if( type.length() == 0 )
-						continue;
-						
-					if( (type.toUpperCase().compareTo("S") == 0) || (type.toUpperCase().compareTo("D") == 0) )
-						break;
-				}
-
-				if( type.toUpperCase().compareTo("S") == 0 )
-					RT = RoomType.SINGLE;
-				else
-					RT = RoomType.DOUBLE;
-
-				if (price == 0.0)
-					AR.addNewRoom( new FreeRoom(roomNumber, RT) );
-				else
-					AR.addNewRoom( new Room(roomNumber, price, RT) );
 				
-				System.out.println( "\n" + AR.getRoom(roomNumber) );
-
-				do {
-				
-					System.out.print("\nWould you like to add another room (Y/N)? ");
-					ans = cliMainMenu.CLI.nextLine();
-
-				} while( (ans.toLowerCase().compareTo("yes") != 0) && (ans.toLowerCase().compareTo("y") != 0) && (ans.toLowerCase().compareTo("no") != 0) && (ans.toLowerCase().compareTo("n") != 0) );
-				
-				System.out.println();
-
-			} while( (ans.toLowerCase().compareTo("yes") == 0) || (ans.toLowerCase().compareTo("y") == 0) );
-
-			//AR.addRooms( new ArrayList<IRoom>( rooms.values() ) );
-		}
-		// end addRooms()
-		
-		
 		@Override 
 		public String toString()
 		{
@@ -370,7 +221,7 @@ public class cliAdminMenu implements AdminMenu
 			 for(int i = 0; i < 45; i++)
 		 		line += "*";
 
-			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tAdd a Room\n5.\tChange A Room's Price Per Night\n6.\tSee All Reservations For A Room\n7.\tBack to Main Menu\n";
+			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee All Reservations For A Room\n7.\tBack to Main Menu\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 

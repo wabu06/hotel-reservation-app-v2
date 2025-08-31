@@ -43,8 +43,8 @@ public class AdminResource
 				RS.addRoom(rm);
 		}
 		
-		public IRoom changeRoomPrice(String roomNumber, Double price) {
-			return RS.changeRoomPrice(roomNumber, price);
+		public void changePriceForRooms(Double price, RoomType type) {
+			RS.changePriceForRooms(price, type);
 		}
 		
 		public void addNewRoom(IRoom room) {
@@ -55,11 +55,13 @@ public class AdminResource
 			return RS.getRoomCount();
 		}
 		
-		public Collection<Reservation> getReservationsForRoom(String rmNum) {
+		public Collection<Reservation> getRoomReservations(String rmNum) {
 			return RS.getRoomReservations(rmNum);
 		}
 		
-		public Collection<IRoom> getAllRooms() { return RS.getRooms(); }
+		public Collection<Room> getAllRooms() {
+			return RS.getRooms();
+		}
 		
 		public Collection<Customer> getAllCustomers() { return CS.getAllCustomers(); }
 		
@@ -67,8 +69,8 @@ public class AdminResource
 		
 		public boolean roomExist(String roomId) { return RS.roomExist(roomId); }
 		
-		public Collection<Reservation> getAllReservations() { return RS.getAllReservations(); }
-		
-		//public void displayAllReservations() { RS.printAllReservations(); }
+		public Collection<Reservation> getAllReservations() {
+			return RS.getAllReservations();
+		}
 }
 

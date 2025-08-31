@@ -91,26 +91,36 @@ public class ReservationService
     		}
     	}
     }
+    
+    public void changePriceForRooms(Double price, RoomType type)
+    {
+    	if(type == RoomType.SINGLE)
+    		Room.setSinglePrice(price);
+    	else
+    		Room.setDoublePrice(price);
+    }
 		
-		public void addRoom(Room room)
-		{
-			rooms.put(room.getRoomNumber(), room);
-			
-			if(room.getRoomType() == RoomType.SINGLE) {
-				singles.put(room.getRoomNumber(), new ArrayList<Reservation>());
-				hotelRepo.updateSingles(singles);
-			}
-			else {
-				doubles.put(room.getRoomNumber(), new ArrayList<Reservation>());
-				hotelRepo.updateDoubles(doubles);
-			}
-		}
+//		public void addRoom(Room room)
+//		{
+//			rooms.put(room.getRoomNumber(), room);
+//			
+//			if(room.getRoomType() == RoomType.SINGLE) {
+//				singles.put(room.getRoomNumber(), new ArrayList<Reservation>());
+//				hotelRepo.updateSingles(singles);
+//			}
+//			else {
+//				doubles.put(room.getRoomNumber(), new ArrayList<Reservation>());
+//				hotelRepo.updateDoubles(doubles);
+//			}
+//		}
 		
 		public Room getARoom(String roomId) {
 			return rooms.get(roomId);
 		}
 		
-		public boolean roomExist(String roomId) { return rooms.containsKey(roomId); }
+		public boolean roomExist(String roomId) {
+			return rooms.containsKey(roomId);
+		}
 		
 		public Collection<Room> getRooms() {
 			return rooms.values();
