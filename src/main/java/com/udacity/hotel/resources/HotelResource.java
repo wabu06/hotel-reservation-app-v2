@@ -42,7 +42,7 @@ public class HotelResource
 			return RS.getCustomerReservations(email);
 		}
 		
-		public Optional<Reservation> getReservationByID(Reservation reserves, int ID) {
+		public Optional<Reservation> getReservationByID(Collection<Reservation> reserves, int ID) {
 			return RS.getReservationByID(reserves, ID);
 		}
 		

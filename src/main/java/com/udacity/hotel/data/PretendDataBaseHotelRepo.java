@@ -25,7 +25,7 @@ public class PretendDataBaseHotelRepo implements HotelRepository
 	public static PretendDataBaseHotelRepo getInstance() { return instance; }
 	
 		//preference keys
-  private static final String CUSTOMERS = "CUSTOMERS"
+  private static final String CUSTOMERS = "CUSTOMERS";
   private static final String SINGLES = "SINGLES";
   private static final String DOUBLES = "DOUBLES";
 
@@ -85,23 +85,23 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   }
   
   @Override
-  Map< String, ArrayList<Reservation> > getSingles() {
+  public Map< String, ArrayList<Reservation> > getSingles() {
   	return singles;
   }
   
   @Override
-  Map< String, ArrayList<Reservation> > getDoubles() {
+  public Map< String, ArrayList<Reservation> > getDoubles() {
   	return doubles;
   }
   
   @Override
-  void updateSingles(Map< String, ArrayList<Reservation> > singles) {
-  	repo_prefs.put(SINGLES, gson.toJson(singles))
+  public void updateSingles(Map< String, ArrayList<Reservation> > singles) {
+  	repo_prefs.put(SINGLES, gson.toJson(singles));
   }
   
   @Override
-  void updateDoubles(Map< String, ArrayList<Reservation> > doubles) {
-		repo_prefs.put(DOUBLES, gson.toJson(doubles))  
+  public void updateDoubles(Map< String, ArrayList<Reservation> > doubles) {
+		repo_prefs.put(DOUBLES, gson.toJson(doubles));  
   }
 }
 

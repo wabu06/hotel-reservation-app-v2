@@ -27,7 +27,7 @@ public class Reservation
 		
 		private boolean canceled;
 	
-		public Reservation(Customer C, IRoom R, long SL, Double T, Date cid, Date cod)
+		public Reservation(Customer C, Room R, long SL, Double T, Date cid, Date cod)
 		{
 			IDcount = IDprefs.getInt("ID", 0);
 				
@@ -65,7 +65,7 @@ public class Reservation
 			return total;
 		}
 		
-		public IRoom setRoom(IRoom r) {
+		public Room setRoom(Room r) {
 			room = r;
 			return room;
 		}

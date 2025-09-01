@@ -134,7 +134,7 @@ public class cliAdminMenu implements AdminMenu
 		{
 			Collection<Room> rooms = AR.getAllRooms();
 
-			for(IRoom R: rooms)
+			for(Room R: rooms)
 				System.out.println("\n" + R + "\n");
 			
 			System.out.println();

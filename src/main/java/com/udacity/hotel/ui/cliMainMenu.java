@@ -298,6 +298,7 @@ public class cliMainMenu implements MainMenu
 						break;
 					}
 				}
+			}
 					
 			return RI; //new ResInfo(rm, cid, cod);
 		}

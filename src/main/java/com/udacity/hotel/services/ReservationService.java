@@ -6,6 +6,9 @@ import java.util.stream.Stream;
 import java.util.stream.Collectors;
 import java.util.concurrent.TimeUnit;
 
+import java.io.IOException;
+import java.io.InputStream;
+
 //import java.util.Properties;
 
 import com.udacity.hotel.models.*;
@@ -54,13 +57,14 @@ public class ReservationService
 			try (InputStream is = getClass().getClassLoader().getResourceAsStream("rooms.properties")) {
       	props.load(is);
     	}
-    	catch (IOException ioe ) {
+    	//catch (IOException ioe ) {
+    	catch (Exception exp ) {
        	//price.properties not found
        	System.exit(1);
     	}
     	
-    	Integer rpf = Integer.parseInt( prop.getProperty("rooms.per.floor") );
-    	Integer floors = Integer.parseInt( prop.getProperty("floors") );
+    	Integer rpf = Integer.parseInt( props.getProperty("rooms.per.floor") );
+    	Integer floors = Integer.parseInt( props.getProperty("floors") );
     	
     	rooms = new HashMap<String, Room>();
     	
@@ -231,7 +235,7 @@ public class ReservationService
 			{
 				boolean vacant;
 				
-				for(Map.entry< String, ArrayList<Reservation> > E: singles.entrySet())
+				for(Map.Entry< String, ArrayList<Reservation> > E: singles.entrySet())
 				{
 					if(E.getValue().isEmpty())
 					{
@@ -255,7 +259,7 @@ public class ReservationService
 			{
 				boolean vacant;
 				
-				for(Map.entry< String, ArrayList<Reservation> > E: doubles.entrySet());
+				for(Map.Entry< String, ArrayList<Reservation> > E: doubles.entrySet())
 				{
 					if(E.getValue().isEmpty())
 					{
@@ -281,7 +285,7 @@ public class ReservationService
 		
 		public Collection<Reservation> getCustomerReservations(String email)
 		{
-			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values.stream().flatMap(r -> r.stream()));
+			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values().stream().flatMap(r -> r.stream()));
 			
 			reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
 			
@@ -294,7 +298,7 @@ public class ReservationService
 		{ 
 			String email = customer.getEmail();
 			
-			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values.stream().flatMap(r -> r.stream()));
+			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values().stream().flatMap(r -> r.stream()));
 			
 			reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
 			
@@ -307,7 +311,7 @@ public class ReservationService
 		{
 			Room room = rooms.get(roomID);
 			
-			if(room.getRoomType() = RoomType.SINGLE)
+			if(room.getRoomType() == RoomType.SINGLE)
 				return singles.get(roomID);
 			else
 				return doubles.get(roomID);
@@ -317,19 +321,19 @@ public class ReservationService
 		{
 			//return ReservationMap.values().stream().flatMap( a -> a.stream() ).collect(Collectors.toList());
 			
-			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values.stream().flatMap(r -> r.stream()));
+			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values().stream().flatMap(r -> r.stream()));
 			return reservations.toList();
 		}
 		
 		public Collection<Reservation> getNonCanceledReservations(String email)
 		{
-			Collection<Reservation> reservations = getCustomerReservations(email)
+			Collection<Reservation> reservations = getCustomerReservations(email);
 			return reservations.stream().filter(r -> !r.isCanceled()).toList();
 			
 				//return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
 		}
 		
-		public Optional<Reservation> getReservationByID(Reservation reserves, int ID)
+		public Optional<Reservation> getReservationByID(Collection<Reservation> reserves, int ID)
 		{
 			Optional<Reservation> RO = reserves.stream().filter( r -> r.getID() == ID).findAny();
 			return RO;

@@ -11,7 +11,7 @@ import java.io.InputStream;
 
 public class Room
 {
-	private static Preferences price_prefs
+	private static Preferences price_prefs;
 	
 	static Double single_price;
 	static Double double_price;
@@ -20,7 +20,7 @@ public class Room
 	{
 		Properties props = new Properties();
 		
-		try (InputStream is = getClass().getClassLoader().getResourceAsStream("price.properties")) {
+		try (InputStream is = new Room("555", RoomType.SINGLE).getClass().getClassLoader().getResourceAsStream("price.properties")) {
        props.load(is);
     }
     catch (IOException ioe ) {
@@ -74,6 +74,8 @@ public class Room
 			price = single_price;
 		else
 			price = double_price;
+		
+		return price;
 	}
 	
 	public String getRoomNumber() { return roomNumber; }

@@ -37,19 +37,19 @@ public class AdminResource
 		
 		public Customer getCustomer(String email) { return CS.getCustomer(email); }
 		
-		public void addRooms(List<IRoom> rooms)
-		{
-			for(IRoom rm: rooms)
-				RS.addRoom(rm);
-		}
+//		public void addRooms(List<Room> rooms)
+//		{
+//			for(Room rm: rooms)
+//				RS.addRoom(rm);
+//		}
 		
 		public void changePriceForRooms(Double price, RoomType type) {
 			RS.changePriceForRooms(price, type);
 		}
 		
-		public void addNewRoom(IRoom room) {
-			RS.addRoom(room);
-		}
+//		public void addNewRoom(Room room) {
+//			RS.addRoom(room);
+//		}
 		
 		public int getRoomCount() {
 			return RS.getRoomCount();
@@ -65,7 +65,7 @@ public class AdminResource
 		
 		public Collection<Customer> getAllCustomers() { return CS.getAllCustomers(); }
 		
-		public IRoom getRoom(String roomId) { return RS.getARoom(roomId); }
+		public Room getRoom(String roomId) { return RS.getARoom(roomId); }
 		
 		public boolean roomExist(String roomId) { return RS.roomExist(roomId); }
 		
