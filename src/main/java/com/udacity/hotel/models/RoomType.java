@@ -1,4 +1,8 @@
 package com.udacity.hotel.models;
 
 
-public enum RoomType { SINGLE, DOUBLE }
+public enum RoomType {
+	NONE,
+	SINGLE,
+	DOUBLE
+}

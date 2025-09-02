@@ -101,10 +101,8 @@ public class HotelResource
 			
 			long pinHash = C.getPinHash();
 			
-			if( (pinHash != pin.hashCode()) && (!email.equalsIgnoreCase( C.getEmail() )))
-				return false;
-			else
-				return true;
+			//return (pinHash == pin.hashCode()) && (email.compareTo( C.getEmail() ) == 0);
+			return (pinHash == pin.hashCode()) && (email.equalsIgnoreCase( C.getEmail() ) );
 		}
 }
 

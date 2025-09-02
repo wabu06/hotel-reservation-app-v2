@@ -11,7 +11,7 @@ import com.udacity.hotel.resources.*;
 import static com.udacity.hotel.resources.UtilityResource.*;
 
 
-public class cliMainMenu implements MainMenu
+public class cliMainMenu
 {
 		static Scanner CLI = new Scanner(System.in);
 		
@@ -21,8 +21,7 @@ public class cliMainMenu implements MainMenu
 		final static cliMainMenu mmInstance = new cliMainMenu();
 		public static cliMainMenu getInstance() { return mmInstance; }
 		
-		@Override
-		public MainMenu launch()
+		public cliMainMenu launch()
 		{
 			System.out.println("WABU's Hotel Reservation Application v1.0.0\n");
 			return mmInstance;
@@ -33,8 +32,7 @@ public class cliMainMenu implements MainMenu
 			HR = HotelResource.getInstance();
 			AR = AdminResource.getInstance();
 		}
-		
-		@Override
+
 		public void mainMenuManager()
 		{
 			cliAdminMenu AM = cliAdminMenu.getInstance();
@@ -126,17 +124,18 @@ public class cliMainMenu implements MainMenu
 				return email;
 		}
 
-		@Override
 		public void displayCustomerReservations()
 		{
 			String email = validateCredentials();
 			
 			if(email == null)
 				return;
+				
+			//System.out.println(email);
 			
 			Collection<Reservation> reserves = HR.getAllCustomerReservations(email);
 			
-			if (reserves == null)
+			if (reserves.isEmpty())
 				System.out.println("\nYou Have No Reservations\n");
 			else
 			{ 
@@ -368,7 +367,7 @@ public class cliMainMenu implements MainMenu
 			System.out.println( "\n" + HR.changeReservation(reservation, rm, cid, cod) + "\n");
 		}
 		
-		@Override
+
 		public void reserveRoom()
 		{
 			String email = getEmail();
@@ -399,7 +398,6 @@ public class cliMainMenu implements MainMenu
 		}
 		// end of reserveRoom()
 
-		@Override 
 		public Customer createAccount(String email)
 		{
 			String lastName, firstName;

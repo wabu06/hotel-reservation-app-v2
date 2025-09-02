@@ -35,7 +35,9 @@ public class AdminResource
 			pwPrefs.putInt("PW_HASH", pw.hashCode());
 		}
 		
-		public Customer getCustomer(String email) { return CS.getCustomer(email); }
+		public Customer getCustomer(String email) {
+			return CS.getCustomer(email);
+		}
 		
 //		public void addRooms(List<Room> rooms)
 //		{
@@ -51,6 +53,14 @@ public class AdminResource
 //			RS.addRoom(room);
 //		}
 		
+		public Double getSinglesPrice() {
+			return Room.getSinglePrice();
+		}
+		
+		public Double getDoublesPrice() {
+			return Room.getDoublePrice();
+		}
+		
 		public int getRoomCount() {
 			return RS.getRoomCount();
 		}
@@ -63,11 +73,17 @@ public class AdminResource
 			return RS.getRooms();
 		}
 		
-		public Collection<Customer> getAllCustomers() { return CS.getAllCustomers(); }
+		public Collection<Customer> getAllCustomers() {
+			return CS.getAllCustomers();
+		}
 		
-		public Room getRoom(String roomId) { return RS.getARoom(roomId); }
+		public Room getRoom(String roomId) {
+			return RS.getARoom(roomId);
+		}
 		
-		public boolean roomExist(String roomId) { return RS.roomExist(roomId); }
+		public boolean roomExist(String roomId) {
+			return RS.roomExist(roomId);
+		}
 		
 		public Collection<Reservation> getAllReservations() {
 			return RS.getAllReservations();

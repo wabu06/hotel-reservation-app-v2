@@ -16,6 +16,8 @@
 *16. when showing a reservation the price at which it was orignally booked should be displayed, not the price that might have changed for the room price
 *17. Show reservations for a room from admin menu
 18. show all reservations for a customer from admin menu
+*19. show current room rates
+20. show which rooms are vacant for a given timeframe
 
 
 

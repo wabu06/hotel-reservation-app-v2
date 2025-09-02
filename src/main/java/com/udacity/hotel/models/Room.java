@@ -20,7 +20,7 @@ public class Room
 	{
 		Properties props = new Properties();
 		
-		try (InputStream is = new Room("555", RoomType.SINGLE).getClass().getClassLoader().getResourceAsStream("price.properties")) {
+		try (InputStream is = new Room("555", RoomType.NONE).getClass().getClassLoader().getResourceAsStream("price.properties")) {
        props.load(is);
     }
     catch (IOException ioe ) {
@@ -57,6 +57,14 @@ public class Room
 		roomNumber = rm.roomNumber;
 		price = rm.price;
 		type = rm.type;		
+	}
+	
+	public static Double getSinglePrice() {
+		return single_price;
+	}
+	
+	public static Double getDoublePrice() {
+		return double_price;
 	}
 	
 	public static void setSinglePrice(Double p) {

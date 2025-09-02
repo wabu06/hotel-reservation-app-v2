@@ -11,7 +11,7 @@ import com.udacity.hotel.resources.*;
 import static com.udacity.hotel.resources.UtilityResource.*;
 
 
-public class cliAdminMenu implements AdminMenu
+public class cliAdminMenu
 {
 		//Scanner CLI;
 		
@@ -56,8 +56,7 @@ public class cliAdminMenu implements AdminMenu
 				return false;
 			}
 		}
-		
-		@Override
+
 		public void adminMenuManager()
 		{
 			if( !isAuthentic() )
@@ -99,10 +98,14 @@ public class cliAdminMenu implements AdminMenu
 					break;
 					
 					case 6:
+						showRoomRates();
+					break;
+					
+					case 7:
 						displayRoomReservations();
 					break;
 				
-					case 7:
+					case 8:
 						System.out.println(); // return to main menu
 						return;
 				
@@ -115,7 +118,7 @@ public class cliAdminMenu implements AdminMenu
 		}
 		// end of adminMenuManager()
 		
-		@Override
+
 		public void displayAllReservations()
 		{
 			Collection<Reservation> reserves = AR.getAllReservations();
@@ -129,7 +132,6 @@ public class cliAdminMenu implements AdminMenu
 			}
 		}
 		
-		@Override
 		public void displayAllRooms()
 		{
 			Collection<Room> rooms = AR.getAllRooms();
@@ -140,7 +142,11 @@ public class cliAdminMenu implements AdminMenu
 			System.out.println();
 		}
 		
-		Double getPrice()
+		public void showRoomRates()	{
+			System.out.println("\nSingle Rooms Current Price Per Night: $" + AR.getSinglesPrice() + "\nDouble Rooms Current Price Per Night: $" + AR.getDoublesPrice() + "\n");
+		}
+		
+		private Double getPrice()
 		{
 			Double price;
 			
@@ -149,7 +155,7 @@ public class cliAdminMenu implements AdminMenu
 				try
 				{	
 					System.out.print("Enter new price per night: ");
-					price = Double.valueOf( cliMainMenu.CLI.nextLine() );
+					price = Double.parseDouble( cliMainMenu.CLI.nextLine() );
 					break;
 				}
 				catch(Exception ex)
@@ -162,13 +168,11 @@ public class cliAdminMenu implements AdminMenu
 			return price;
 		}
 		
-		@Override
 		public void changePriceForSingles()
 		{
 			AR.changePriceForRooms(getPrice(), RoomType.SINGLE);
 		} // end price change
-		
-		@Override
+
 		public void changePriceForDoubles()
 		{
 			AR.changePriceForRooms(getPrice(), RoomType.DOUBLE);
@@ -221,14 +225,13 @@ public class cliAdminMenu implements AdminMenu
 			 for(int i = 0; i < 45; i++)
 		 		line += "*";
 
-			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee All Reservations For A Room\n7.\tBack to Main Menu\n";
+			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee Current Room Rates\n7.\tSee All Reservations For A Room\n8.\tBack to Main Menu\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 
 			return "Admin Menu\n" + line + items + line + prompt;
 		}
 
-		@Override
 		public void displayAllCustomers()
 		{
 			Collection<Customer> customers = AR.getAllCustomers();
