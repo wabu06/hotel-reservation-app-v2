@@ -14,6 +14,8 @@ public interface HotelRepository
 	Map<String, Customer> updateCustomers(Map<String, Customer> new_customers);
 	Map<String, Customer> getCustomers();
 	
+	Map<String, Room> getRooms();
+	
 	Map< String, ArrayList<Reservation> > getSingles();
 	void updateSingles(Map< String, ArrayList<Reservation> > singles);
 	

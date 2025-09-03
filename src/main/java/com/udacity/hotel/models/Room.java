@@ -23,7 +23,8 @@ public class Room
 		try (InputStream is = new Room("555", RoomType.NONE).getClass().getClassLoader().getResourceAsStream("price.properties")) {
        props.load(is);
     }
-    catch (IOException ioe ) {
+    	//catch (IOException ioe ) {
+    catch (Exception exp ) {
        //price.properties not found
        System.exit(1);
     }

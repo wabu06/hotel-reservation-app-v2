@@ -63,38 +63,32 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   	
   	String singlesString = repo_prefs.get(SINGLES, null);
   	
-//    if(singlesString == null)
-//    	singles = new HashMap< String, ArrayList<Reservation> >();
-//    else
-//    {
-//    	Type type = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
-//      singles = gson.fromJson(singlesString, type);
-//    }
+    if(singlesString == null)
+    	singles = new HashMap< String, ArrayList<Reservation> >();
+    else
+    {
+    	Type type = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
+      singles = gson.fromJson(singlesString, type);
+    }
     
     String doublesString = repo_prefs.get(DOUBLES, null);
     
-//    if(doublesString == null)
-//    	doubles = new HashMap< String, ArrayList<Reservation> >();
-//    else
-//    {
-//    	Type type = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
-//      doubles = gson.fromJson(doublesString, type);
-//    }
+    if(doublesString == null)
+    	doubles = new HashMap< String, ArrayList<Reservation> >();
+    else
+    {
+    	Type type = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
+      doubles = gson.fromJson(doublesString, type);
+    }
     
     String roomString = repo_prefs.get("ROOMS", null);
     
-    if( (roomString == null) || (singlesString == null) || (doublesString == null) )
+    if(roomString == null)
     	createRooms();
     else
     {
-    	Type roomType = new TypeToken< Map<String, Room> >() {}.getType();
-      rooms = gson.fromJson(roomString, roomType);
-      
-      Type singleType = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
-      singles = gson.fromJson(singlesString, singleType);
-      
-      Type doubleType = new TypeToken< Map< String, ArrayList<Reservation> > >() {}.getType();
-      doubles = gson.fromJson(doublesString, doubleType);
+    	Type type = new TypeToken< Map<String, Room> >() {}.getType();
+      rooms = gson.fromJson(roomString, type);
     }
   }
   
@@ -108,9 +102,6 @@ public class PretendDataBaseHotelRepo implements HotelRepository
 		
 	private void createRooms()
 	{
-		singles = new HashMap< String, ArrayList<Reservation> >();
-		doubles = new HashMap< String, ArrayList<Reservation> >();
-		
 		Properties props = new Properties();
 		
 		try (InputStream is = getClass().getClassLoader().getResourceAsStream("rooms.properties")) {
