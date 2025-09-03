@@ -42,9 +42,17 @@ public class ReservationService
     public void changePriceForRooms(Double price, RoomType type)
     {
     	if(type == RoomType.SINGLE)
+    	{
     		Room.setSinglePrice(price);
+    		rooms.values().stream().filter(rm -> rm.getRoomType() == RoomType.SINGLE).forEach(rm -> rm.setRoomPrice());
+    		hotelRepo.updateRooms(rooms);
+    	}
     	else
+    	{
     		Room.setDoublePrice(price);
+    		rooms.values().stream().filter(rm -> rm.getRoomType() == RoomType.DOUBLE).forEach(rm -> rm.setRoomPrice());
+    		hotelRepo.updateRooms(rooms);
+    	}
     }
 		
 //		public void addRoom(Room room)

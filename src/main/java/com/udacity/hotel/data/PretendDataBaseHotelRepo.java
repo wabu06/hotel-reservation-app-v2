@@ -166,6 +166,11 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   }
   
   @Override
+  public void updateRooms(Map<String, Room> new_rooms) {
+  	repo_prefs.put("ROOMS", gson.toJson(new_rooms));
+  }
+  
+  @Override
   public Map< String, ArrayList<Reservation> > getSingles() {
   	return singles;
   }

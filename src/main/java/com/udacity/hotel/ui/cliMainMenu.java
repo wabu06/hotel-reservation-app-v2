@@ -269,7 +269,7 @@ public class cliMainMenu
 				{
 					do
 					{
-						System.out.print("Select Room Type as, D for Double, S for Single: ");
+						System.out.print("Select Room Type as, D for Double - ($" + Room.getDoublePrice() + "), S for Single - ($" + Room.getSinglePrice() + "): ");
 						typeEntry = CLI.nextLine();
 					}
 					while( (typeEntry.toUpperCase().compareTo("S") != 0) && (typeEntry.toUpperCase().compareTo("D") != 0) );
