@@ -88,5 +88,9 @@ public class AdminResource
 		public Collection<Reservation> getAllReservations() {
 			return RS.getAllReservations();
 		}
+		
+		public Collection<Room> findVacantInTime(Date checkInDate, Date checkOutDate) {
+			return RS.findVacantInTime(checkInDate, checkOutDate);
+		}
 }
 

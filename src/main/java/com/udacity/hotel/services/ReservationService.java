@@ -178,6 +178,43 @@ public class ReservationService
 			return R;
 		}
 		
+		public Collection<Room> findVacantInTime(Date checkInDate, Date checkOutDate)
+		{
+			List<Room> vRooms = new ArrayList<>();
+			
+			boolean vacant;
+				
+			for(Map.Entry< String, ArrayList<Reservation> > E: singles.entrySet())
+			{
+				if(E.getValue().isEmpty())
+					vRooms.add( rooms.get(E.getKey()) );
+				else
+				{
+					vacant = E.getValue().stream().filter(r -> !r.isCanceled())
+																				.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
+						
+					if(vacant)
+						vRooms.add( rooms.get(E.getKey()) );
+				}
+			}
+			
+			for(Map.Entry< String, ArrayList<Reservation> > E: doubles.entrySet())
+			{
+				if(E.getValue().isEmpty())
+					vRooms.add( rooms.get(E.getKey()) );
+				else
+				{
+					vacant = E.getValue().stream().filter(r -> !r.isCanceled())
+																				.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
+						
+					if(vacant)
+						vRooms.add( rooms.get(E.getKey()) );
+				}
+			}
+			
+			return vRooms;
+		}
+		
 		public Room findRoom(Date checkInDate, Date checkOutDate, RoomType type)
 		{
 			Room room = null;

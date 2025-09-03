@@ -106,6 +106,10 @@ public class cliAdminMenu
 					break;
 				
 					case 8:
+						getVacantInTimeframe();
+					break;
+				
+					case 9:
 						System.out.println(); // return to main menu
 						return;
 				
@@ -118,6 +122,46 @@ public class cliAdminMenu
 		}
 		// end of adminMenuManager()
 		
+
+		void getVacantInTimeframe()
+		{
+			String cidEntry, codEntry; // check IN/OUT dates, as entered by user
+			
+			Date cid, cod;
+			
+			while(true)
+			{
+				try
+				{
+					System.out.print("\nPlease enter a check in date as (mm/dd/yyy): ");
+					cidEntry = cliMainMenu.CLI.nextLine();
+					cid = getDateInstance(cidEntry, 11);
+					break;
+				}
+				catch(Exception ex) {
+					System.out.println("\n" + ex.getMessage() );
+				}
+			}
+			
+			while(true)
+			{
+				try
+				{
+					System.out.print("\nPlease enter a check out date as (mm/dd/yyy): ");
+					codEntry = cliMainMenu.CLI.nextLine();
+					cod = getDateInstance(codEntry, 15);
+					break;
+				}
+				catch(Exception ex) {
+					System.out.println("\n" + ex.getMessage() );
+				}
+			}
+			
+			for(Room rm: AR.findVacantInTime(cid, cod))
+				System.out.println("\n" + rm);
+			
+			System.out.println();
+		}
 
 		public void displayAllReservations()
 		{
@@ -154,7 +198,7 @@ public class cliAdminMenu
 			{
 				try
 				{	
-					System.out.print("Enter new price per night: ");
+					System.out.print("\nEnter new price per night: ");
 					price = Double.parseDouble( cliMainMenu.CLI.nextLine() );
 					break;
 				}
@@ -184,7 +228,7 @@ public class cliAdminMenu
 			
 			while(true)
 			{
-				System.out.print("Please Enter The Room Number: ");
+				System.out.print("\nPlease Enter The Room Number: ");
 				roomNumber = cliMainMenu.CLI.nextLine();
 					
 				if( roomNumber.length() > 0 )
@@ -225,7 +269,7 @@ public class cliAdminMenu
 			 for(int i = 0; i < 45; i++)
 		 		line += "*";
 
-			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee Current Room Rates\n7.\tSee All Reservations For A Room\n8.\tBack to Main Menu\n";
+			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee Current Room Rates\n7.\tSee All Reservations For A Room\n8.\tShow Rooms Vacant For A Particular Check-in & Check-out Date\n9.\tBack to Main Menu\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 
