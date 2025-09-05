@@ -19,8 +19,8 @@ public class ReservationService
 { 	
 	 	Map<String, Room> rooms;
 		
-		Map< String, ArrayList<Reservation> > singles;
-		Map< String, ArrayList<Reservation> > doubles;
+		//Map< String, ArrayList<Reservation> > singles;
+		//Map< String, ArrayList<Reservation> > doubles;
 		
 		PretendDataBaseHotelRepo hotelRepo;
 		
@@ -33,8 +33,8 @@ public class ReservationService
 			hotelRepo = PretendDataBaseHotelRepo.getInstance();
 			
 			rooms = hotelRepo.getRooms();
-			singles = hotelRepo.getSingles();
-			doubles = hotelRepo.getDoubles();
+			//singles = hotelRepo.getSingles();
+			//doubles = hotelRepo.getDoubles();
 			
 			//addRooms();
 		}
@@ -89,10 +89,7 @@ public class ReservationService
 		{
 			String roomID = R.getRoom().getRoomNumber();
 			
-			if(singles.get(roomID) != null)
-				singles.get(roomID).remove(R);
-			else
-				doubles.get(roomID).remove(R);
+			rooms.get(roomID).getReservations().remove(R);
 			
 			return R;
 		}
@@ -100,14 +97,8 @@ public class ReservationService
 		public Reservation restoreReservation(Reservation R)
 		{
 			String roomID = R.getRoom().getRoomNumber();
-			RoomType type = R.getRoom().getRoomType();
 			
-			if(type == RoomType.SINGLE)
-			{
-				singles.get(roomID).add(R);
-			}
-			else
-				doubles.get(roomID).add(R);
+			rooms.get(roomID).getReservations().add(R);
 			
 			return R;
 		}
@@ -130,17 +121,9 @@ public class ReservationService
 			R.setCheckInDate(cid);
 			R.setCheckOutDate(cod);
 			
-			if(room.getRoomType() == RoomType.SINGLE)
-			{
-				singles.get(roomID).add(R);
-				hotelRepo.updateSingles(singles);
-			}
-				
-			else
-			{
-				doubles.get(roomID).add(R);
-				hotelRepo.updateDoubles(doubles);
-			}
+			room.getReservations().add(R);
+			
+			hotelRepo.updateReservations(room);
 
 			return R;
 		}
@@ -159,22 +142,10 @@ public class ReservationService
 			
 			R = new Reservation(customer, new Room( room ), staylength, totalCost, checkInDate, checkOutDate);
 			
-			String roomID = room.getRoomNumber();
-			RoomType type = room.getRoomType();
+			room.getReservations().add(R);
 			
-			String email = customer.getEmail();
+			hotelRepo.updateReservations(room);
 			
-			if(type == RoomType.SINGLE)
-			{
-				singles.get(roomID).add(R);
-				hotelRepo.updateSingles(singles);
-			}
-			else
-			{
-				doubles.get(roomID).add(R);
-				hotelRepo.updateDoubles(doubles);
-			}
-
 			return R;
 		}
 		
@@ -183,35 +154,21 @@ public class ReservationService
 			List<Room> vRooms = new ArrayList<>();
 			
 			boolean vacant;
-				
-			for(Map.Entry< String, ArrayList<Reservation> > E: singles.entrySet())
+			
+			for(Room rm: rooms.values())
 			{
-				if(E.getValue().isEmpty())
-					vRooms.add( rooms.get(E.getKey()) );
+				if(rm.getReservations().isEmpty())
+					vRooms.add(rm);
 				else
 				{
-					vacant = E.getValue().stream().filter(r -> !r.isCanceled())
-																				.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
-						
+					vacant = rm.getReservations().stream().filter(r -> !r.isCanceled())
+																			 					.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
+					
 					if(vacant)
-						vRooms.add( rooms.get(E.getKey()) );
+						vRooms.add(rm);
 				}
 			}
-			
-			for(Map.Entry< String, ArrayList<Reservation> > E: doubles.entrySet())
-			{
-				if(E.getValue().isEmpty())
-					vRooms.add( rooms.get(E.getKey()) );
-				else
-				{
-					vacant = E.getValue().stream().filter(r -> !r.isCanceled())
-																				.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
-						
-					if(vacant)
-						vRooms.add( rooms.get(E.getKey()) );
-				}
-			}
-			
+
 			return vRooms;
 		}
 		
@@ -219,65 +176,38 @@ public class ReservationService
 		{
 			Room room = null;
 			
-			if(type == RoomType.SINGLE)
+			for(Room rm: rooms.values())
 			{
-				boolean vacant;
-				
-				for(Map.Entry< String, ArrayList<Reservation> > E: singles.entrySet())
+				if(rm.getRoomType() == type)
 				{
-					if(E.getValue().isEmpty())
+					if(rm.getReservations().isEmpty())
 					{
-						room = rooms.get(E.getKey());
+						room = rm;
 						break;
 					}
 					else
 					{
-						vacant = E.getValue().stream().filter(r -> !r.isCanceled())
-																					.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
+						boolean vacant;
+						vacant = rm.getReservations().stream().filter(r -> !r.isCanceled())
+																				 					.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
 						
 						if(vacant)
 						{
-							room = rooms.get(E.getKey());
+							room = rm;
 							break;
 						}
 					}
 				}
-			}
-			else
-			{
-				boolean vacant;
-				
-				for(Map.Entry< String, ArrayList<Reservation> > E: doubles.entrySet())
-				{
-					if(E.getValue().isEmpty())
-					{
-						room = rooms.get(E.getKey());
-						break;
-					}
-					else
-					{
-						vacant = E.getValue().stream().filter(r -> !r.isCanceled())
-																					.allMatch( r -> checkOutDate.before( r.getCheckInDate() ) || checkInDate.after( r.getCheckOutDate() ) );
+			}			
 						
-						if(vacant)
-						{
-							room = rooms.get(E.getKey());
-							break;
-						}
-					}
-				}
-			}
-			
 			return room;
 		}
 		
 		public Collection<Reservation> getCustomerReservations(String email)
 		{
-			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values().stream().flatMap(r -> r.stream()));
-			
+			Stream<Reservation> reservations = rooms.values().stream().flatMap(rm -> rm.getReservations().stream());
+					
 			reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
-			
-			//reservations = reservations.filter(r -> !r.isCanceled());
 			
 			return reservations.toList();
 		}
@@ -286,39 +216,25 @@ public class ReservationService
 		{ 
 			String email = customer.getEmail();
 			
-			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values().stream().flatMap(r -> r.stream()));
-			
+			Stream<Reservation> reservations = rooms.values().stream().flatMap(rm -> rm.getReservations().stream());
+					
 			reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
-			
-			//reservations = reservations.filter(r -> !r.isCanceled());
 	
 			return reservations.toList();
 		}
 		
-		public Collection<Reservation> getRoomReservations(String roomID)
-		{
-			Room room = rooms.get(roomID);
-			
-			if(room.getRoomType() == RoomType.SINGLE)
-				return singles.get(roomID);
-			else
-				return doubles.get(roomID);
+		public Collection<Reservation> getRoomReservations(String roomID) {
+			return rooms.get(roomID).getReservations();
 		}
 
-		public Collection<Reservation> getAllReservations()
-		{
-			//return ReservationMap.values().stream().flatMap( a -> a.stream() ).collect(Collectors.toList());
-			
-			Stream<Reservation> reservations = Stream.concat(singles.values().stream().flatMap(r -> r.stream()), doubles.values().stream().flatMap(r -> r.stream()));
-			return reservations.toList();
+		public Collection<Reservation> getAllReservations() {
+			return rooms.values().stream().flatMap(rm -> rm.getReservations().stream()).toList();
 		}
 		
 		public Collection<Reservation> getNonCanceledReservations(String email)
 		{
 			Collection<Reservation> reservations = getCustomerReservations(email);
 			return reservations.stream().filter(r -> !r.isCanceled()).toList();
-			
-				//return ReservationMap.get(email).stream().filter(r -> !r.isCanceled()).toList();
 		}
 		
 		public Optional<Reservation> getReservationByID(Collection<Reservation> reserves, int ID)
@@ -335,10 +251,7 @@ public class ReservationService
 			{
 				RO.get().cancel();
 				
-				if(RO.get().getRoom().getRoomType() == RoomType.SINGLE)
-					hotelRepo.updateSingles(singles);
-				else
-					hotelRepo.updateDoubles(doubles);
+				hotelRepo.updateReservations(RO.get().getRoom());
 					
 				return RO;
 			}

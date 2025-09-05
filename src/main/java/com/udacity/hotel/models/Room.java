@@ -42,6 +42,8 @@ public class Room
 	private Double price;
 	private RoomType type;
 	
+	ArrayList<Reservation> reservations;
+	
 	public Room(String N, RoomType T)
 	{
 		roomNumber = N;
@@ -51,13 +53,17 @@ public class Room
 			price = single_price;
 		else
 			price = double_price;
+			
+		reservations = new ArrayList<>();
 	}
 		
 	public Room(Room rm)
 	{
 		roomNumber = rm.roomNumber;
 		price = rm.price;
-		type = rm.type;		
+		type = rm.type;
+		
+		reservations = null;		
 	}
 	
 	public static Double getSinglePrice() {
@@ -90,6 +96,18 @@ public class Room
 	public String getRoomNumber() { return roomNumber; }
 	public Double getRoomPrice() { return price; }
 	public RoomType getRoomType() { return type; }
+	
+	public ArrayList<Reservation> getReservations() {
+		return reservations; 
+	}
+	
+	public void setReservations(ArrayList<Reservation> R) {
+		reservations = R;
+	}
+	
+	public void nullifyReservations() {
+		reservations = null;
+	}
 	
 	@Override 
 	public String toString()
