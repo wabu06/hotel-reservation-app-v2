@@ -54,7 +54,7 @@ public class Room
 		else
 			price = double_price;
 			
-		reservations = new ArrayList<>();
+		reservations = new ArrayList<Reservation>();
 	}
 		
 	public Room(Room rm)

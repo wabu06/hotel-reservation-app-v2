@@ -5,6 +5,8 @@ import java.util.*;
 //import java.util.Scanner;
 //import java.util.regex.*;
 
+//import com.google.gson.Gson;
+
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
 import com.udacity.hotel.resources.*;
@@ -179,8 +181,11 @@ public class cliAdminMenu
 		public void displayAllRooms()
 		{
 			Collection<Room> rooms = AR.getAllRooms();
+			
+			//Gson gson = new Gson();
 
 			for(Room R: rooms)
+				//System.out.println("\n" + gson.toJson(R) + "\n");
 				System.out.println("\n" + R + "\n");
 			
 			System.out.println();

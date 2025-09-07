@@ -118,10 +118,9 @@ public class PretendDataBaseHotelRepo implements HotelRepository
     		rooms.put(roomID, new Room(roomID, type));
     	}
     }
+    Map<String, Room> saved_rooms = new HashMap<>(rooms);
     
-    Map<String, Room> saved_rooms = new HashMap<>();
-    
-    rooms.values().stream().forEach(rm -> saved_rooms.put( rm.getRoomNumber(), new Room(rm) ));
+    saved_rooms.values().stream().forEach(rm -> rm.nullifyReservations());
     
     repo_prefs.put("ROOMS", gson.toJson(saved_rooms));
   }
@@ -146,9 +145,9 @@ public class PretendDataBaseHotelRepo implements HotelRepository
   @Override
   public void updateRooms(Map<String, Room> new_rooms)
   {
-  	Map<String, Room> saved_rooms = new HashMap<>();
+  	Map<String, Room> saved_rooms = new HashMap<>(new_rooms);
     
-    new_rooms.values().stream().forEach(rm -> saved_rooms.put( rm.getRoomNumber(), new Room(rm) ));
+    saved_rooms.values().stream().forEach(rm -> rm.nullifyReservations());
     
     repo_prefs.put("ROOMS", gson.toJson(saved_rooms));
   }
