@@ -221,7 +221,7 @@ public class cliMainMenu
 			
 		}
 		
-		ResInfo searchForRooms()
+		private ResInfo searchForRooms()
 		{
 			String cidEntry, codEntry; // check IN/OUT dates, as entered by user
 			
@@ -375,7 +375,10 @@ public class cliMainMenu
 			Customer C = HR.getCustomer(email);
 
 			if( C == null )
-				C = createAccount(email);
+			{
+				System.out.println("\nYou Will Need To Create An Account, Before You Can Reserve A Room!!\n");
+				return;
+			}
 			else
 			{
 				String pin = getPin();
