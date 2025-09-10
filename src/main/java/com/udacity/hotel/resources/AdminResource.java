@@ -92,5 +92,17 @@ public class AdminResource
 		public Collection<Room> findVacantInTime(Date checkInDate, Date checkOutDate) {
 			return RS.findVacantInTime(checkInDate, checkOutDate);
 		}
+		
+		public Optional<Reservation> getReservationByID(Collection<Reservation> reserves, int ID) {
+			return RS.getReservationByID(reserves, ID);
+		}
+		
+		public boolean changeRoom(String roomID, Reservation reserves) {
+			return RS.changeRoom(roomID, reserves);
+		}
+		
+		public Collection<Reservation> getCustomerReservations(String email) {
+			return RS.getCustomerReservations(email);
+		}
 }
 

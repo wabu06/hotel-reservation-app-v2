@@ -216,11 +216,13 @@ public class ReservationService
 		{ 
 			String email = customer.getEmail();
 			
-			Stream<Reservation> reservations = rooms.values().stream().flatMap(rm -> rm.getReservations().stream());
+			return getCustomerReservations(email);
+			
+			//Stream<Reservation> reservations = rooms.values().stream().flatMap(rm -> rm.getReservations().stream());
 					
-			reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
+			//reservations = reservations.filter( r -> email.compareTo(r.getCustomer().getEmail()) == 0);
 	
-			return reservations.toList();
+			//return reservations.toList();
 		}
 		
 		public Collection<Reservation> getRoomReservations(String roomID) {
@@ -257,6 +259,53 @@ public class ReservationService
 			}
 			else
 				return Optional.empty();
+		}
+		
+		public boolean changeRoom(String roomID, Reservation reserves)
+		{
+			RoomType oldType = reserves.getRoom().getRoomType();
+			RoomType newType = rooms.get(roomID).getRoomType();
+			
+			if(oldType != newType)
+				return false;
+				
+			if( rooms.get(roomID).getReservations().isEmpty() )
+			{
+				String oldRoomID = reserves.getRoom().getRoomNumber();
+			
+				rooms.get(oldRoomID).getReservations().remove(reserves);
+			
+				reserves.getRoom().setRoomNumber(roomID);
+			
+				rooms.get(roomID).getReservations().add(reserves);
+			
+				hotelRepo.updateReservations(rooms.get(oldRoomID));
+				hotelRepo.updateReservations(rooms.get(roomID));
+				
+				return true;
+			}
+			
+			Date cid = reserves.getCheckInDate();
+			Date cod = reserves.getCheckOutDate();
+			
+			boolean vacant = rooms.get(roomID).getReservations().stream().filter(r -> !r.isCanceled())
+																				 									.allMatch( r -> cod.before( r.getCheckInDate() ) || cid.after( r.getCheckOutDate() ) );
+			
+			if(!vacant)
+				return false;
+			
+			String oldRoomID = reserves.getRoom().getRoomNumber();
+			
+			rooms.get(oldRoomID).getReservations().remove(reserves);
+			
+			reserves.getRoom().setRoomNumber(roomID);
+			
+			rooms.get(roomID).getReservations().add(reserves);
+			
+			hotelRepo.updateReservations(rooms.get(oldRoomID));
+			hotelRepo.updateReservations(rooms.get(roomID));
+			
+			return true;
 		}
 }
 

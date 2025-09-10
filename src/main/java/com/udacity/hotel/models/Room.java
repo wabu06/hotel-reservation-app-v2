@@ -93,7 +93,13 @@ public class Room
 		return price;
 	}
 	
-	public String getRoomNumber() { return roomNumber; }
+	public String getRoomNumber() {
+		return roomNumber;
+	}
+	public void setRoomNumber(String rnum) {
+		roomNumber = rnum;
+	}
+	
 	public Double getRoomPrice() { return price; }
 	public RoomType getRoomType() { return type; }
 	

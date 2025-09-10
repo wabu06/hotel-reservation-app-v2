@@ -112,8 +112,16 @@ public class cliAdminMenu
 					break;
 				
 					case 9:
+						changeRoomOfReservation();
+					break;
+				
+					case 10:
+						showCustomerReservations();
+					break;
+					
+					case 11:
 						System.out.println(); // return to main menu
-						return;
+					return;
 				
 					default:
 						System.out.println("\nInvalid Input!!\n");
@@ -165,7 +173,7 @@ public class cliAdminMenu
 			System.out.println();
 		}
 
-		public void displayAllReservations()
+		void displayAllReservations()
 		{
 			Collection<Reservation> reserves = AR.getAllReservations();
 		
@@ -178,7 +186,7 @@ public class cliAdminMenu
 			}
 		}
 		
-		public void displayAllRooms()
+		void displayAllRooms()
 		{
 			Collection<Room> rooms = AR.getAllRooms();
 			
@@ -191,7 +199,7 @@ public class cliAdminMenu
 			System.out.println();
 		}
 		
-		public void showRoomRates()	{
+		void showRoomRates()	{
 			System.out.println("\nSingle Rooms Current Price Per Night: $" + AR.getSinglesPrice() + "\nDouble Rooms Current Price Per Night: $" + AR.getDoublesPrice() + "\n");
 		}
 		
@@ -217,23 +225,23 @@ public class cliAdminMenu
 			return price;
 		}
 		
-		public void changePriceForSingles()
+		void changePriceForSingles()
 		{
 			AR.changePriceForRooms(getPrice(), RoomType.SINGLE);
 		} // end price change
 
-		public void changePriceForDoubles()
+		void changePriceForDoubles()
 		{
 			AR.changePriceForRooms(getPrice(), RoomType.DOUBLE);
 		} // end price change
 		
-		public void displayRoomReservations()
+		private String getRoomNumber(String prompt)
 		{
 			String roomNumber;
 			
 			while(true)
 			{
-				System.out.print("\nPlease Enter The Room Number: ");
+				System.out.print(prompt);
 				roomNumber = cliMainMenu.CLI.nextLine();
 					
 				if( roomNumber.length() > 0 )
@@ -252,6 +260,13 @@ public class cliAdminMenu
 				}
 			}
 			
+			return roomNumber;
+		}
+		
+		void displayRoomReservations()
+		{
+			String roomNumber = getRoomNumber("\nPlease Enter The Room Number: ");
+			
 			Collection<Reservation> reserves = AR.getRoomReservations(roomNumber);
 			
 			if(reserves.size() == 0)
@@ -260,7 +275,85 @@ public class cliAdminMenu
 				return;
 			}
 			
-			System.out.println("\nThese Are The Reservations For Room: " + roomNumber + "\n");
+			//System.out.println("\nThese Are The Reservations For Room: " + roomNumber + "\n");
+			
+			for(Reservation R: reserves)
+				System.out.println("\n" + R + "\n");
+		}
+		
+		void changeRoomOfReservation()
+		{
+			String roomNumber = getRoomNumber("\nPlease Enter Old Room Number: ");
+			
+			Collection<Reservation> reserves = AR.getRoomReservations(roomNumber);
+			
+			if(reserves.size() == 0)
+			{
+				System.out.println("\nThere Are No Reservations For Room " + roomNumber + "\n");
+				return;
+			}
+			
+			for(Reservation R: reserves)
+				System.out.println("\n" + R + "\n");
+			
+			Optional<Reservation> RO;
+			int ID; // room number/ID
+			
+			while(true)
+			{
+				try {
+					System.out.print("\nPlease Enter Reservation ID: ");
+					ID = Integer.parseInt( cliMainMenu.CLI.nextLine() );
+				}
+				catch(Exception exp) {
+					System.out.println("\nInvalid Entry!!\n");
+					continue;
+				}
+				
+				RO = AR.getReservationByID(reserves, ID);
+				
+				if(RO.isEmpty())
+					System.out.println("\nInvalid ID!!\n");
+				else
+					break;
+			}
+			
+			roomNumber = getRoomNumber("\nPlease Enter New Room Number: ");
+			
+			if( AR.changeRoom(roomNumber, RO.get()) )
+				System.out.println("\n" + RO.get() + "\n");
+			else
+				System.out.println("\nUnable To Change Rooms!!\n");
+		}
+
+		private String getEmail()
+		{
+			String email;
+			boolean valid;
+			
+			do
+			{
+				System.out.print("\nPlease enter customer's email address, as name@domain.com: ");
+				email = cliMainMenu.CLI.nextLine();
+
+				valid = isEmailValid(email);
+
+			} while(!valid);
+			
+			return email;
+		}
+		
+		void showCustomerReservations()
+		{
+			String email = getEmail();
+			
+			Collection<Reservation> reserves = AR.getCustomerReservations(email);
+			
+			if(reserves.isEmpty())
+			{
+				System.out.println("\nCustomer Has No Reservations!!\n");
+				return;
+			}
 			
 			for(Reservation R: reserves)
 				System.out.println("\n" + R + "\n");
@@ -274,7 +367,7 @@ public class cliAdminMenu
 			 for(int i = 0; i < 45; i++)
 		 		line += "*";
 
-			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee Current Room Rates\n7.\tSee All Reservations For A Room\n8.\tShow Rooms Vacant For A Particular Check-in & Check-out Date\n9.\tBack to Main Menu\n";
+			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee Current Room Rates\n7.\tSee All Reservations For A Room\n8.\tShow Rooms Vacant For A Particular Check-in & Check-out Date\n9.\tChange The Room Of A Reservation\n10.\tShow All Reservations For A Customer\n11.\tBack to Main Menu\n";
 
 			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 
