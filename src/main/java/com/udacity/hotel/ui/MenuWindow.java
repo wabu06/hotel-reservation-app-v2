@@ -26,7 +26,7 @@ import javafx.scene.text.Text;
 
 
 
-public class HotelMenuGui extends Application
+public class MenuWindow extends Application
 {
 	Stage ms;
 	Scene mms;

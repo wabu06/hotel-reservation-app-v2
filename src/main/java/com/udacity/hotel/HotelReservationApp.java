@@ -21,7 +21,7 @@ public class HotelReservationApp
 		if(args.length == 1)
 		{
 			if( args[0].toLowerCase().equals("gui") )
-				Application.launch(HotelMenuGui.class, args);
+				Application.launch(MenuWindow.class, args);
 			else
 				cliMainMenu.getInstance().launch().mainMenuManager();
 		}
