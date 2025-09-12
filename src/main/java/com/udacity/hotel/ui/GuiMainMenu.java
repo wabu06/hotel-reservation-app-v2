@@ -1,7 +1,7 @@
 package com.udacity.hotel.ui;
 
 
-import java.util.*;
+//import java.util.*;
 
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
@@ -27,10 +27,17 @@ public class GuiMainMenu
 	Stage ms; // menu stage
 	Scene mms; // main menu scene
 	
-	GuiMainMenu(Stage menuStage)
+	String[] items_txt;
+	Hyperlink[] items;
+	
+	final private static GuiMainMenu gmm = new GuiMainMenu();
+
+	public static GuiMainMenu getInstance() {
+		return gmm;
+	}
+	
+	private GuiMainMenu()
 	{
-		ms = menuStage;
-		
 		BorderPane pane = new BorderPane();
 		
 		Text title = new Text("Main Menu");
@@ -39,20 +46,28 @@ public class GuiMainMenu
 		VBox vbox = new VBox();
 		pane.setLeft(vbox);
 		
-		Hyperlink item1 = new Hyperlink("Find And Reserve A Room?");
-		Hyperlink item2 = new Hyperlink("See My Reservations?");
-		Hyperlink item3 = new Hyperlink("Create An Account?");
-		Hyperlink item4 = new Hyperlink("Goto Admin Menu?");
-		Hyperlink item5 = new Hyperlink("Exit APP?");
-		vbox.getChildren().addAll(item1, item2, item3, item4, item5);
+		items_txt = new String[]{"Reserve A Room", "See My Reservations", "Create An Account", "Goto Admin Menu", "Exit APP"};
+		items = new Hyperlink[items_txt.length];
 		
-		item4.setOnAction( e -> ms.setScene(ams) );
-		item5.setOnAction( e -> exit() );
+		for(int t = 0; t < items_txt.length; t++)
+			items[t] = new Hyperlink(items_txt[t]);
 		
-		mms = new Scene(pane); 
+		vbox.getChildren().addAll(items);
+			
+		mms = new Scene(pane);
 	}
 	
-	Scene getMenu() {
-		return mms
+	public void setStage(Stage menuStage) {
+		ms = menuStage;
+	}
+	
+	public Scene getMenu() {
+		return mms;
+	}
+	
+	public void setAdminAndExitActionHandlers(Scene ams)
+	{
+		items[items_txt.length - 2].setOnAction( e -> ms.setScene(ams) );
+		items[items_txt.length - 1].setOnAction( e -> exit() );
 	}
 }
