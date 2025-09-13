@@ -17,7 +17,7 @@ public class cliAdminMenu
 {
 		//Scanner CLI;
 		
-		HotelResource HR;
+		//HotelResource HR;
 		AdminResource AR;
 
 		final static cliAdminMenu amInstance = new cliAdminMenu();
@@ -25,7 +25,7 @@ public class cliAdminMenu
 
 		private cliAdminMenu()
 		{
-			HR = HotelResource.getInstance();
+			//HR = HotelResource.getInstance();
 			AR = AdminResource.getInstance();
 		}
 		

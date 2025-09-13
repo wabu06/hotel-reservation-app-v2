@@ -43,8 +43,8 @@ public class MenuWindow extends Application
 		//ams = adminMenuScene();
 		
 		menuStage.setTitle("WABU's Hotel Reservation Application v1.0.0");
-		menuStage.setWidth(600);
-    menuStage.setHeight(200);
+		menuStage.setWidth(450);
+    menuStage.setHeight(350);
     
     gmm = GuiMainMenu.getInstance();
     gam = GuiAdminMenu.getInstance();
