@@ -1,6 +1,7 @@
 package com.udacity.hotel.ui;
 
 
+
 //import java.util.*;
 
 import java.util.Optional;
@@ -10,6 +11,8 @@ import com.udacity.hotel.services.*;
 import com.udacity.hotel.resources.*;
 import static com.udacity.hotel.resources.UtilityResource.*;
 
+import com.udacity.hotel.ui.dialogs.*;
+
 import javafx.stage.Stage;
 
 import javafx.scene.Scene;
@@ -18,7 +21,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.BorderPane;
 
-import javafx.scene.control.Hyperlink;
+import javafx.scene.control.*;
+//import javafx.scene.control.Hyperlink;
 import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 //import javafx.scene.text.*;
@@ -87,24 +91,44 @@ public class GuiMainMenu
 	
 	public void setAdminAndExitActionHandlers(Scene ams)
 	{
-		items[items_txt.length - 2].setOnAction( e -> 
-																							{
-																								PassWordDialog pwDialog = new PassWordDialog();
-																								Optional<String> result = pwDialog.showAndWait();
+		items[items_txt.length - 2].setOnAction( e -> {
+																										int pwHash = AR.getPasswordHash();
+																										
+																										if(pwHash == 0)
+																										{
+																											var spwDialog = new SetPassWordDialog();
+																											Optional<String> passwd = spwDialog.showAndWait();
+																											
+																											if(passwd.get().isEmpty())
+																											{
+																												new Alert(Alert.AlertType.ERROR, "You Did Not Enter An Admin Password!!").showAndWait();
+																												return;
+																											}
+																											
+																											AR.savePasswordHash(passwd.get());
+																											ms.setScene(ams);
+																											
+																											return;
+																										}
+																										
+																										PassWordDialog pwDialog = new PassWordDialog();
+																										Optional<String> passwd = pwDialog.showAndWait();
 																								
-																								int pwHash = AR.getPasswordHash();
+																										String pw;
 																								
-																								String pw;
+																										if(passwd.isPresent())
+																											pw = passwd.get();
+																										else
+																											return;
 																								
-																								if(result.isPresent())
-																									pw = result.get();
-																								else
-																									return;
-																								
-																								if(pwHash == pw.hashCode())
-																									ms.setScene(ams);
-																								return;
-																							});
+																										if(pwHash == pw.hashCode())
+																											ms.setScene(ams);
+																										else
+																										{
+																											var pwError = new Alert(Alert.AlertType.ERROR, "Incorrect Password!!");
+																											pwError.showAndWait();
+																										}
+																									});
 																							
 		items[items_txt.length - 1].setOnAction( e -> exit() );
 	}

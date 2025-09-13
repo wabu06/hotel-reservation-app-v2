@@ -37,10 +37,16 @@ public class cliAdminMenu
 			
 			if(pwHash == 0)
 			{
-				System.out.print("Please Select An Admin password: ");
-				pw = cliMainMenu.CLI.nextLine();
+				do
+				{
+					System.out.print("\nPlease Select An Admin password: ");
+					pw = cliMainMenu.CLI.nextLine();
+				}
+				while(pw.isEmpty());
+				
 				AR.savePasswordHash(pw);
 				System.out.println();
+				
 				return true;
 			}
 			

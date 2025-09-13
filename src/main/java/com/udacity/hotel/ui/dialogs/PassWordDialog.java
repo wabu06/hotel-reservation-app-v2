@@ -1,4 +1,4 @@
-package com.udacity.hotel.ui;
+package com.udacity.hotel.ui.dialogs;
 
 
 import javafx.scene.control.*;
@@ -9,7 +9,7 @@ public class PassWordDialog extends Dialog<String>
 {
 	PasswordField pwField;
 	
-	PassWordDialog()
+	public PassWordDialog()
 	{
 		Label pwLabel = new Label("Admin Password:");
 		pwField = new PasswordField();
