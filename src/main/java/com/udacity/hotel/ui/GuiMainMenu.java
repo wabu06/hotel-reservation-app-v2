@@ -27,12 +27,18 @@ import javafx.scene.text.Text;
 import javafx.scene.text.Font;
 //import javafx.scene.text.*;
 
+import javafx.event.ActionEvent;
+
 import static javafx.application.Platform.exit;
+
+import javafx.scene.paint.Color;
+
 
 
 public class GuiMainMenu
 {
 	AdminResource AR;
+	HotelResource HR;
 	
 	Stage ms; // menu stage
 	Scene mms; // main menu scene
@@ -49,12 +55,14 @@ public class GuiMainMenu
 	private GuiMainMenu()
 	{
 		AR = AdminResource.getInstance();
+		HR = HotelResource.getInstance();
 		
 		BorderPane pane = new BorderPane();
 		
 		Text title = new Text("Main Menu");
 		title.setUnderline(true);
 		title.setFont(new Font(20));
+		title.setFill(Color.FIREBRICK);
 		pane.setTop(title);
 		
 		VBox vbox = new VBox();
@@ -75,6 +83,8 @@ public class GuiMainMenu
 		
 		for(int t = 0; t < items_txt.length; t++)
 			items[t] = new Hyperlink(items_txt[t]);
+
+		items[4].setOnAction(this::showAccountDialog); // create account
 		
 		vbox.getChildren().addAll(items);
 			
@@ -87,6 +97,31 @@ public class GuiMainMenu
 	
 	public Scene getMenu() {
 		return mms;
+	}
+	
+	private void showAccountDialog(ActionEvent e) {
+		new AccountPsuedoDialog(ms).show();
+	}
+	
+	private void creatAccount(ActionEvent e)
+	{
+		AccountPsuedoDialog accountDialog = new AccountPsuedoDialog(ms);
+		
+		accountDialog.show();
+		
+//		Customer customer = new Customer(	accountDialog.getFirstName(),
+//																			accountDialog.getLastName(),
+//																			accountDialog.getPhone(),
+//																			accountDialog.getEmail(),
+//																			accountDialog.getPin().hashCode());
+		
+		if(accountDialog.isOkButtonClicked())
+			HR.createACustomer(	accountDialog.getPhone(),
+													accountDialog.getEmail(),
+													accountDialog.getFirstName(),
+													accountDialog.getLastName(),
+													accountDialog.getPin().hashCode());
+		
 	}
 	
 	public void setAdminAndExitActionHandlers(Scene ams)

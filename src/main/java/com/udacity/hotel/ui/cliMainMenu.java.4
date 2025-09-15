@@ -431,33 +431,16 @@ public class cliMainMenu
 		@Override 
 		public String toString()
 		{
-			String line = "";
+			String line = "", items, prompt;
 
 			for(int i = 0; i < 35; i++)
 		 		line += "#";
 
-			String[] items = new String[] {
-				"\n1.\tReserve A Room",
-				"\n2.\tChange A Reservation",
-				"\n3.\tCancel A Reservation",
-				"\n4.\tSee My Reservations",
-				"\n5.\tCreate An Account",
-				"\n6.\tAdmin",
-				"\n7.\tExit\n"
-			};
-			
-			String menu = "\nMain Menu\n" + line;
-			
-			for(int i = 0; i < items.length; i++)
-				menu = menu + items[i];
-			
-			menu = menu + line;
-			
-			String prompt = "\n\nPlease enter the number corresponding to the menu option: ";
-			
-			menu = menu + prompt;
+			items = "\n1.\tReserve A Room\n2.\tChange A Reservation\n3.\tCancel A Reservation\n4.\tSee My Reservations\n5.\tCreate An Account\n6.\tAdmin\n7.\tExit\n";
 
-			return menu;
+			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
+
+			return "Main Menu\n" + line + items + line + prompt;
 		}
 		
 		public class ResInfo

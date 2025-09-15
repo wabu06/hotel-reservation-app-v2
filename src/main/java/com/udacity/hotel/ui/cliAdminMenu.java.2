@@ -368,37 +368,16 @@ public class cliAdminMenu
 		@Override 
 		public String toString()
 		{
-			String line = "";
+			String line = "", items, prompt;
 
 			 for(int i = 0; i < 45; i++)
 		 		line += "*";
 
-			String[] items = new String[] {
-				"\n1.\tSee all Customers",
-				"\n2.\tSee all Rooms",
-				"\n3.\tSee all Reservations",
-				"\n4.\tChange Price For Single Rooms",
-				"\n5.\tChange Price For Double Rooms",
-				"\n6.\tSee Current Room Rates",
-				"\n7.\tSee All Reservations For A Room",
-				"\n8.\tShow Rooms Vacant For A Particular Check-in & Check-out Date",
-				"\n9.\tChange The Room Of A Reservation",
-				"\n10.\tShow All Reservations For A Customer",
-				"\n11.\tBack to Main Menu\n"
-			};
-			
-			String menu = "\nAdmin Menu\n" + line;
-			
-			for(int i = 0; i < items.length; i++)
-				menu = menu + items[i];
-			
-			menu = menu + line;
+			items = "\n1.\tSee all Customers\n2.\tSee all Rooms\n3.\tSee all Reservations\n4.\tChange Price For Single Rooms\n5.\tChange Price For Double Rooms\n6.\tSee Current Room Rates\n7.\tSee All Reservations For A Room\n8.\tShow Rooms Vacant For A Particular Check-in & Check-out Date\n9.\tChange The Room Of A Reservation\n10.\tShow All Reservations For A Customer\n11.\tBack to Main Menu\n";
 
-			String prompt = "\n\nPlease enter the number corresponding to the menu option: ";
-			
-			menu = menu + prompt;
+			prompt = "\n\nPlease enter the number corresponding to the menu option: ";
 
-			return menu;
+			return "Admin Menu\n" + line + items + line + prompt;
 		}
 
 		public void displayAllCustomers()
