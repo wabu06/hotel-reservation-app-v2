@@ -82,7 +82,7 @@ public class AccountPsuedoDialog
 		Button okBttn = new Button("OK");
 		//okBttn.setOnAction(e -> dialogStage.hide());
 		okBttn.setOnAction(this::getAndParseDialogData);
-		
+
 		Button cancelBttn = new Button("CANCEL");
 		cancelBttn.setOnAction( e ->	{
 																		okButtonClicked = false;
@@ -103,7 +103,7 @@ public class AccountPsuedoDialog
 		dialogStage = new Stage(StageStyle.UTILITY);
 		
 		dialogStage.initOwner(owner);
-		dialogStage.initModality(Modality.WINDOW_MODAL);
+		dialogStage.initModality(Modality.APPLICATION_MODAL);
 		
 		dialogStage.setWidth(350);
 		dialogStage.setHeight(250);
@@ -160,7 +160,7 @@ public class AccountPsuedoDialog
 		
 		okButtonClicked = true;
 		
-		dialogStage.hide();
+		dialogStage.close();
 	}
 	
 	public boolean isOkButtonClicked() {

@@ -84,7 +84,7 @@ public class GuiMainMenu
 		for(int t = 0; t < items_txt.length; t++)
 			items[t] = new Hyperlink(items_txt[t]);
 
-		items[4].setOnAction(this::showAccountDialog); // create account
+		items[4].setOnAction(this::creatAccount); // create account
 		
 		vbox.getChildren().addAll(items);
 			
@@ -107,20 +107,20 @@ public class GuiMainMenu
 	{
 		AccountPsuedoDialog accountDialog = new AccountPsuedoDialog(ms);
 		
-		accountDialog.show();
+		accountDialog.getStage().showAndWait();
 		
-//		Customer customer = new Customer(	accountDialog.getFirstName(),
-//																			accountDialog.getLastName(),
-//																			accountDialog.getPhone(),
-//																			accountDialog.getEmail(),
-//																			accountDialog.getPin().hashCode());
+		Customer C;
 		
 		if(accountDialog.isOkButtonClicked())
-			HR.createACustomer(	accountDialog.getPhone(),
-													accountDialog.getEmail(),
-													accountDialog.getFirstName(),
-													accountDialog.getLastName(),
-													accountDialog.getPin().hashCode());
+		{
+			C = HR.createACustomer(	accountDialog.getPhone(),
+															accountDialog.getEmail(),
+															accountDialog.getFirstName(),
+															accountDialog.getLastName(),
+															accountDialog.getPin().hashCode()
+														);
+			System.out.println("\n" +  C + "\n");
+		}
 		
 	}
 	
