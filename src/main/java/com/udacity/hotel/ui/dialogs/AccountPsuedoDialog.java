@@ -46,7 +46,7 @@ public class AccountPsuedoDialog
 	
 	private Label msg;
 	
-	private boolean okButtonClicked;
+	private boolean okButtonClicked = false;
 
 	public AccountPsuedoDialog(Stage owner)
 	{

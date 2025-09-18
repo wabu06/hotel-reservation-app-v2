@@ -5,8 +5,6 @@ package com.udacity.hotel.ui;
 //import java.util.*;
 
 import java.util.Optional;
-import java.util.Map;
-import java.util.LinkedHashMap;
 
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
@@ -46,10 +44,8 @@ public class GuiMainMenu
 	Stage ms; // menu stage
 	Scene mms; // main menu scene
 	
-	//String[] items_txt;
-	//Hyperlink[] items;
-	
-	Map<String, Hyperlink> itemsMap;
+	String[] items_txt;
+	Hyperlink[] items;
 	
 	final private static GuiMainMenu gmm = new GuiMainMenu();
 
@@ -74,7 +70,7 @@ public class GuiMainMenu
 		vbox.setSpacing(15.0d);
 		pane.setLeft(vbox);
 		
-		String[] items_txt = new String[]{
+		items_txt = new String[]{
 			"Reserve A Room",
 			"Change A Reservation",
 			"Cancel A Reservation",
@@ -84,23 +80,12 @@ public class GuiMainMenu
 			"Exit APP"
 		};
 		
-		//items = new Hyperlink[items_txt.length];
+		items = new Hyperlink[items_txt.length];
 		
-		itemsMap = new LinkedHashMap<>();
-		
-//		for(int t = 0; t < items_txt.length; t++)
-//			items[t] = new Hyperlink(items_txt[t]);
+		for(int t = 0; t < items_txt.length; t++)
+			items[t] = new Hyperlink(items_txt[t]);
 
-		for(String txt: items_txt)
-			itemsMap.put(txt, new Hyperlink(txt));
-
-		//items[4].setOnAction(this::creatAccount);
-		
-		itemsMap.get("Create An Account").setOnAction(this::creatAccount);
-		
-		Hyperlink[] items = new Hyperlink[items_txt.length];
-		
-		items = itemsMap.values().toArray(items);
+		items[4].setOnAction(this::creatAccount); // create account
 		
 		vbox.getChildren().addAll(items);
 			
@@ -145,8 +130,7 @@ public class GuiMainMenu
 	
 	public void setAdminAndExitActionHandlers(Scene ams)
 	{
-		//items[items_txt.length - 2].setOnAction( e -> {
-		itemsMap.get("Goto Admin Menu").setOnAction( e -> {
+		items[items_txt.length - 2].setOnAction( e -> {
 																										int pwHash = AR.getPasswordHash();
 																										
 																										if(pwHash == 0)
@@ -198,8 +182,6 @@ public class GuiMainMenu
 																										}
 																									});
 																							
-		//items[items_txt.length - 1].setOnAction( e -> exit() );
-		itemsMap.get("Exit APP").setOnAction( e -> exit() );
-		
+		items[items_txt.length - 1].setOnAction( e -> exit() );
 	}
 }

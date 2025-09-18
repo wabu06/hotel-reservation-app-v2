@@ -3,6 +3,9 @@ package com.udacity.hotel.ui;
 
 //import java.util.*;
 
+import java.util.Map;
+import java.util.LinkedHashMap;
+
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
 import com.udacity.hotel.resources.*;
@@ -28,8 +31,10 @@ public class GuiAdminMenu
 	Stage ms; // menu stage
 	Scene ams; // admin menu scene
 	
-	String[] items_txt;
-	Hyperlink[] items;
+	//String[] items_txt;
+	//Hyperlink[] items;
+	
+	Map<String, Hyperlink> itemsMap;
 	
 	final private static GuiAdminMenu gam = new GuiAdminMenu();
 
@@ -50,7 +55,7 @@ public class GuiAdminMenu
 		//vbox.setSpacing(5.0d);
 		pane.setLeft(vbox);
 		
-		items_txt = new String[]{
+		String[] items_txt = new String[]{
 			"See All Customers",
 			"See All Rooms",
 			"See All Reservations",
@@ -64,10 +69,19 @@ public class GuiAdminMenu
 			"Back To Main Menu"
 		};
 		
-		items = new Hyperlink[items_txt.length];
+		//items = new Hyperlink[items_txt.length];
 		
-		for(int t = 0; t < items_txt.length; t++)
-			items[t] = new Hyperlink(items_txt[t]);
+//		for(int t = 0; t < items_txt.length; t++)
+//			items[t] = new Hyperlink(items_txt[t]);
+
+		itemsMap = new LinkedHashMap<>();
+		
+		for(String txt: items_txt)
+			itemsMap.put(txt, new Hyperlink(txt));
+		
+		Hyperlink[] items = new Hyperlink[items_txt.length];
+		
+		items = itemsMap.values().toArray(items);
 		
 		vbox.getChildren().addAll(items);
 		
@@ -83,6 +97,7 @@ public class GuiAdminMenu
 	}
 	
 	public void setMainMenuActionHandler(Scene mms) {
-		items[items_txt.length - 1].setOnAction( e -> ms.setScene(mms) );
+		//items[items_txt.length - 1].setOnAction( e -> ms.setScene(mms) );
+		itemsMap.get("Back To Main Menu").setOnAction( e -> ms.setScene(mms) );
 	}
 }
