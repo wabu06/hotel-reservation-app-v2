@@ -401,7 +401,7 @@ public class cliAdminMenu
 			return menu;
 		}
 
-		public void displayAllCustomers()
+		private void displayAllCustomers()
 		{
 			Collection<Customer> customers = AR.getAllCustomers();
 

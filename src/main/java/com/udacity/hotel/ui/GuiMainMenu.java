@@ -46,9 +46,6 @@ public class GuiMainMenu
 	Stage ms; // menu stage
 	Scene mms; // main menu scene
 	
-	//String[] items_txt;
-	//Hyperlink[] items;
-	
 	Map<String, Hyperlink> itemsMap;
 	
 	final private static GuiMainMenu gmm = new GuiMainMenu();
@@ -83,18 +80,11 @@ public class GuiMainMenu
 			"Goto Admin Menu",
 			"Exit APP"
 		};
-		
-		//items = new Hyperlink[items_txt.length];
-		
+
 		itemsMap = new LinkedHashMap<>();
-		
-//		for(int t = 0; t < items_txt.length; t++)
-//			items[t] = new Hyperlink(items_txt[t]);
 
 		for(String txt: items_txt)
 			itemsMap.put(txt, new Hyperlink(txt));
-
-		//items[4].setOnAction(this::creatAccount);
 		
 		itemsMap.get("Create An Account").setOnAction(this::creatAccount);
 		
@@ -145,7 +135,6 @@ public class GuiMainMenu
 	
 	public void setAdminAndExitActionHandlers(Scene ams)
 	{
-		//items[items_txt.length - 2].setOnAction( e -> {
 		itemsMap.get("Goto Admin Menu").setOnAction( e -> {
 																										int pwHash = AR.getPasswordHash();
 																										

@@ -123,38 +123,43 @@ public class AccountPsuedoDialog
 		
 		if( firstName.isEmpty() || lastName.isEmpty() || phone.isEmpty() || email.isEmpty() || pin.isEmpty() )
 		{
-			msg.setText("Cannot Have Blank Fields!!");
-      msg.setTextFill(Color.rgb(210, 39, 30));
+			var alert = new Alert(Alert.AlertType.ERROR, "Cannot Have Blank Fields!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
 			return;
 		}
 		
 		if( !isPhoneNumberValid(phone) )
 		{
-			msg.setText("Phone Number Must Be Entered As, ###-###-####!!");
-      msg.setTextFill(Color.rgb(210, 39, 30));
+			var alert = new Alert(Alert.AlertType.ERROR, "Phone Number Must Be Entered As, ###-###-####!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
 			return;
 		}
 		
 		if( !isEmailValid(email) )
 		{
-			msg.setText("Email Address Must Be Entered As name@domain.com!!");
-      msg.setTextFill(Color.rgb(210, 39, 30));
+			var alert = new Alert(Alert.AlertType.ERROR, "Email Address Must Be Entered As name@domain.com!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
 			return;
 		}
 		
 		if(HR.getCustomer(email) != null)
 		{
-			msg.setText("There Is An Existing Account With The Email " + email + ", Please enter another email address!!");
-      msg.setTextFill(Color.rgb(210, 39, 30));
+			var alert = new Alert(Alert.AlertType.ERROR, "There Is An Existing Account With The Email " + email + ", Please enter another email address!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
 			return;
 		}
 		
-		Optional<String> pinOpt = validatePin(pin);
+		Optional<String> errMsg = validatePin(pin);
 		
-		if( pinOpt.isPresent() )
+		if( errMsg.isPresent() )
 		{
-			msg.setText(pinOpt.get());
-      msg.setTextFill(Color.rgb(210, 39, 30));
+			var alert = new Alert(Alert.AlertType.ERROR, errMsg.get());
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
 			return;
 		}
 		
