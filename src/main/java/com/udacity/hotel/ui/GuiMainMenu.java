@@ -85,6 +85,8 @@ public class GuiMainMenu
 
 		for(String txt: items_txt)
 			itemsMap.put(txt, new Hyperlink(txt));
+			
+		itemsMap.get("Reserve A Room").setOnAction(this::reserveRoom);
 		
 		itemsMap.get("Create An Account").setOnAction(this::creatAccount);
 		
@@ -105,8 +107,9 @@ public class GuiMainMenu
 		return mms;
 	}
 	
-	private void showAccountDialog(ActionEvent e) {
-		new AccountPsuedoDialog(ms).show();
+	private void reserveRoom(ActionEvent e) {
+		var reserve = new ReserveRoomPsuedoDialog(ms);
+		reserve.show();
 	}
 	
 	private void creatAccount(ActionEvent e)

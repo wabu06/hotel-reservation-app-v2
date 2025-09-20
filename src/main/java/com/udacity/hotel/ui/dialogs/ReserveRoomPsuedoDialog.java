@@ -9,7 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
-//import javafx.geometry.Pos;
+import javafx.geometry.Pos;
 
 import javafx.event.ActionEvent;
 
@@ -33,8 +33,14 @@ public class ReserveRoomPsuedoDialog
 	
 	private DatePicker checkInDatePicker;
   private DatePicker checkOutDatePicker;
+  
+  private ToggleGroup rtg; // room type toggle group
+  
+  private String email, pin, roomType;
+  
+  private boolean okButtonClicked = false;
 	
-	ReserveRoomPsuedoDialog(Stage owner)
+	public ReserveRoomPsuedoDialog(Stage owner)
 	{
 		HR = HotelResource.getInstance();
 		
@@ -46,7 +52,44 @@ public class ReserveRoomPsuedoDialog
 		ptf = new PasswordField();
 		HBox pbox = new HBox(pl, ptf);
 		
-		VBox dialogBox = new VBox(ebox, pbox);
+		rtg = new ToggleGroup();
+		
+		Label rtl = new Label("Room Type:");
+		
+		RadioButton srb = new RadioButton("Single");
+    srb.setToggleGroup(rtg);
+    srb.setUserData("Single");
+    
+    RadioButton drb = new RadioButton("Double");
+    drb.setToggleGroup(rtg);
+    drb.setUserData("Double");
+    
+    VBox rtBox = new VBox(rtl, srb, drb);
+    rtBox.setSpacing(5.0d);
+    
+    Label cidl = new Label("Check In Date:");
+    checkInDatePicker = new DatePicker();
+    
+    Label codl = new Label("Check Out Date:");
+    checkOutDatePicker = new DatePicker();
+    
+    VBox dBox = new VBox(cidl, checkInDatePicker, codl, checkOutDatePicker);
+    dBox.setSpacing(5.0d);
+    
+    Button okBttn = new Button("OK");
+		//okBttn.setOnAction(e -> dialogStage.hide());
+		okBttn.setOnAction(this::getAndParseDialogData);
+
+		Button cancelBttn = new Button("CANCEL");
+		cancelBttn.setOnAction( e ->	{
+																		okButtonClicked = false;
+																		dialogStage.hide();
+																	});
+																	
+		HBox bttnBox = new HBox(okBttn, cancelBttn);
+		bttnBox.setSpacing(5.0d);
+		
+		VBox dialogBox = new VBox(ebox, pbox, new Separator (), rtBox, new Separator(), dBox, new Separator(), bttnBox);
 		dialogBox.setSpacing(5.0d);
 		dialogBox.setAlignment(Pos.TOP_CENTER);
 		
@@ -57,10 +100,46 @@ public class ReserveRoomPsuedoDialog
 		dialogStage.initOwner(owner);
 		dialogStage.initModality(Modality.APPLICATION_MODAL);
 		
-		dialogStage.setWidth(350);
-		dialogStage.setHeight(250);
+		dialogStage.setWidth(250);
+		dialogStage.setHeight(350);
 		
 		dialogStage.setScene(dialogScene);
+	}
+	
+	private void getAndParseDialogData(ActionEvent e)
+	{
+		email = etf.getText();
+		pin = ptf.getText();
+		
+		if( email.isEmpty() || pin.isEmpty() )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "Must Enter Email & Pin!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		
+		if(rtg.getSelectedToggle() == null)
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "Please Select A Room Type!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		else
+			roomType = rtg.getSelectedToggle().getUserData().toString();
+			
+		okButtonClicked = true;
+		
+		dialogStage.hide();
+	}
+	
+	public void show() {
+		dialogStage.showAndWait();
+	}
+	
+	public boolean isOkButtonClicked() {
+		return okButtonClicked;
 	}
 }
 
