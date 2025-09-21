@@ -7,6 +7,7 @@ package com.udacity.hotel.ui;
 import java.util.Optional;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.Date;
 
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
@@ -107,9 +108,29 @@ public class GuiMainMenu
 		return mms;
 	}
 	
-	private void reserveRoom(ActionEvent e) {
+	private void reserveRoom(ActionEvent e)
+	{
+		var authenticate = new AuthenticatePsuedoDialog(ms);
+		
+		authenticate.show();
+		
+		if(!authenticate.wasAuthentic())
+			return;
+		
+		String email = authenticate.getEmail();
+		
 		var reserve = new ReserveRoomPsuedoDialog(ms);
 		reserve.show();
+		
+		if(!reserve.okButtonWasClicked())
+			return;
+		
+		RoomType type = reserve.getRoomType();
+		
+		Date cid = reserve.getCheckInDate();
+		Date cod = reserve.getCheckOutDate();
+		
+		Room room = HR.findRoom(cid, cod, type);
 	}
 	
 	private void creatAccount(ActionEvent e)

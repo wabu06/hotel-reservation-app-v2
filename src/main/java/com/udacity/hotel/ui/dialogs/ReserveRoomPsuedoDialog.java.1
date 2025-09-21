@@ -24,8 +24,6 @@ import java.util.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
 
-import com.udacity.hotel.models.*;
-
 
 
 public class ReserveRoomPsuedoDialog
@@ -35,6 +33,9 @@ public class ReserveRoomPsuedoDialog
 	private Stage dialogStage;
 	private Scene dialogScene;
 	
+	private TextField etf;
+	private PasswordField ptf;
+	
 	private DatePicker checkInDatePicker;
   private DatePicker checkOutDatePicker;
   
@@ -42,13 +43,21 @@ public class ReserveRoomPsuedoDialog
   
   private ToggleGroup rtg; // room type toggle group
   
-  private String roomType;
+  private String email, pin, roomType;
   
   private boolean okButtonClicked = false;
 	
 	public ReserveRoomPsuedoDialog(Stage owner)
 	{
 		HR = HotelResource.getInstance();
+		
+		Label el = new Label("Email:");
+		etf = new TextField();
+		HBox ebox = new HBox(el, etf);
+		
+		Label pl = new Label("Pin:");
+		ptf = new PasswordField();
+		HBox pbox = new HBox(pl, ptf);
 		
 		rtg = new ToggleGroup();
 		
@@ -87,7 +96,7 @@ public class ReserveRoomPsuedoDialog
 		HBox bttnBox = new HBox(okBttn, cancelBttn);
 		bttnBox.setSpacing(5.0d);
 		
-		VBox dialogBox = new VBox(rtBox, new Separator(), dBox, new Separator(), bttnBox);
+		VBox dialogBox = new VBox(ebox, pbox, new Separator (), rtBox, new Separator(), dBox, new Separator(), bttnBox);
 		dialogBox.setSpacing(5.0d);
 		dialogBox.setAlignment(Pos.TOP_CENTER);
 		
@@ -99,13 +108,50 @@ public class ReserveRoomPsuedoDialog
 		dialogStage.initModality(Modality.APPLICATION_MODAL);
 		
 		dialogStage.setWidth(250);
-		dialogStage.setHeight(250);
+		dialogStage.setHeight(350);
 		
 		dialogStage.setScene(dialogScene);
 	}
 	
 	private void getAndParseDialogData(ActionEvent e)
 	{
+		email = etf.getText();
+		pin = ptf.getText();
+		
+		if( email.isEmpty() || pin.isEmpty() )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "Must Enter Email & Pin!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		
+		if( !isEmailValid(email) )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "Email Address Must Be Entered As name@domain.com!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		
+		Optional<String> errMsg = validatePin(pin);
+		
+		if( errMsg.isPresent() )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, errMsg.get());
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		
+		if( !HR.isAuthentic(email, pin) )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "Incorrect Email or Pin!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		
 		if(rtg.getSelectedToggle() == null)
 		{
 			var alert = new Alert(Alert.AlertType.ERROR, "Please Select A Room Type!!");
@@ -145,12 +191,16 @@ public class ReserveRoomPsuedoDialog
 		dialogStage.hide();
 	}
 	
-	public RoomType getRoomType()
-	{
-		if(roomType.compareTo("Single") == 0)
-			return RoomType.SINGLE;
-		else
-			return RoomType.DOUBLE;
+	public String getEmail() {
+		return email;
+	}
+	
+	public String getPin() {
+		return pin;
+	}
+	
+	public String getRoomType() {
+		return roomType;
 	}
 	
 	public Date getCheckInDate() {
