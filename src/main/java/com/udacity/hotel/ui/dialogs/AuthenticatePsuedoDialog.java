@@ -56,7 +56,7 @@ public class AuthenticatePsuedoDialog
 
 		Button cancelBttn = new Button("CANCEL");
 		cancelBttn.setOnAction( e ->	{
-																		okButtonClicked = false;
+																		isAuthentic = false;
 																		dialogStage.hide();
 																	});
 																	
@@ -121,7 +121,7 @@ public class AuthenticatePsuedoDialog
 		else
 			isAuthentic = true;
 		
-		okButtonClicked = true;
+		//okButtonClicked = true;
 		
 		dialogStage.hide();
 	}

@@ -2,12 +2,12 @@ package com.udacity.hotel.ui;
 
 
 
-//import java.util.*;
+import java.util.*;
 
-import java.util.Optional;
-import java.util.Map;
-import java.util.LinkedHashMap;
-import java.util.Date;
+//import java.util.Optional;
+//import java.util.Map;
+//import java.util.LinkedHashMap;
+//import java.util.Date;
 
 import com.udacity.hotel.models.*;
 import com.udacity.hotel.services.*;
@@ -89,6 +89,10 @@ public class GuiMainMenu
 			
 		itemsMap.get("Reserve A Room").setOnAction(this::reserveRoom);
 		
+		itemsMap.get("Cancel A Reservation").setOnAction(this::cancelReservation);
+		
+		itemsMap.get("See My Reservations").setOnAction(this::displayCustomerReservations);
+		
 		itemsMap.get("Create An Account").setOnAction(this::creatAccount);
 		
 		Hyperlink[] items = new Hyperlink[items_txt.length];
@@ -120,17 +124,125 @@ public class GuiMainMenu
 		String email = authenticate.getEmail();
 		
 		var reserve = new ReserveRoomPsuedoDialog(ms);
-		reserve.show();
 		
-		if(!reserve.okButtonWasClicked())
+		Room room;
+		
+		Date cid, cod;
+		
+		do
+		{	
+			reserve.show();
+		
+			if(!reserve.okButtonWasClicked())
+				return;
+		
+			RoomType type = reserve.getRoomType();
+		
+			cid = reserve.getCheckInDate();
+			cod = reserve.getCheckOutDate();
+		
+			room = HR.findRoom(cid, cod, type);
+			
+			if(room == null)
+			{
+				String msg = "There are no rooms available for the selected check in/out dates, would you like to try again?";
+				var alert = new Alert(Alert.AlertType.ERROR, msg, ButtonType.YES, ButtonType.NO);
+				alert.initStyle(StageStyle.UNDECORATED);
+				Optional<ButtonType> ans = alert.showAndWait();
+				
+				if(ans.get() == ButtonType.YES)
+					continue;
+				else
+					return;
+			}
+		}
+		while(room == null);
+		
+		Reservation res = HR.bookRoom(email, room, cid, cod);
+		
+		var alert = new Alert(Alert.AlertType.INFORMATION, res.toString());
+		alert.initStyle(StageStyle.UNDECORATED);
+		alert.showAndWait();
+	}
+	
+	private void cancelReservation(ActionEvent e)
+	{
+		var authenticate = new AuthenticatePsuedoDialog(ms);
+		
+		authenticate.show();
+		
+		if(!authenticate.wasAuthentic())
 			return;
 		
-		RoomType type = reserve.getRoomType();
+		String email = authenticate.getEmail();
 		
-		Date cid = reserve.getCheckInDate();
-		Date cod = reserve.getCheckOutDate();
+		Collection<Reservation> reserves = HR.getNonCanceledReservations(email);
 		
-		Room room = HR.findRoom(cid, cod, type);
+		if(reserves.isEmpty())
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "There are no Reservations to Cancel!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		
+		var cancel = new CancelReservationPsuedoDialog(ms, reserves);
+		
+		cancel.show();
+		
+		if(!cancel.okButtonWasClicked())
+			return;
+		
+		int id = cancel.getID();
+		
+		Optional<Reservation> RO = HR.cancelReservation(reserves, id);
+		
+		var alert = new Alert(Alert.AlertType.INFORMATION, RO.get().toString());
+		alert.initStyle(StageStyle.UNDECORATED);
+		alert.showAndWait();
+	}
+	
+	private void displayCustomerReservations(ActionEvent e)
+	{
+		var authenticate = new AuthenticatePsuedoDialog(ms);
+		
+		authenticate.show();
+		
+		if(!authenticate.wasAuthentic())
+			return;
+		
+		String email = authenticate.getEmail();
+		
+		Collection<Reservation> reserves = HR.getAllCustomerReservations(email);
+		
+		if (reserves.isEmpty())
+		{
+			var alert = new Alert(Alert.AlertType.INFORMATION, "You Have No Reservations!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+		}
+		else
+		{
+			VBox rbox = new VBox();
+			
+			for(Reservation R:  reserves)
+				rbox.getChildren().addAll( new Label( R.toString() ), new Label() );
+			
+			ScrollPane sp = new ScrollPane();
+			
+			sp.setVmax(440);
+    	sp.setPrefSize(400, 300);
+    	sp.setContent(rbox);
+      
+    	Dialog<ButtonType> dialog = new Dialog<>();
+    	//dialog.setTitle("Reservations");
+      
+    	DialogPane dp = dialog.getDialogPane();
+    	dp.getButtonTypes().add(ButtonType.OK);
+    	dp.setContent(sp);
+      
+    	dialog.showAndWait();
+		}
 	}
 	
 	private void creatAccount(ActionEvent e)

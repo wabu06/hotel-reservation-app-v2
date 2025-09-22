@@ -20,6 +20,7 @@ import static com.udacity.hotel.resources.UtilityResource.*;
 
 import java.util.Optional;
 import java.util.Date;
+import java.util.Calendar;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -54,11 +55,11 @@ public class ReserveRoomPsuedoDialog
 		
 		Label rtl = new Label("Room Type:");
 		
-		RadioButton srb = new RadioButton("Single");
+		RadioButton srb = new RadioButton("Single ($" + Room.getSinglePrice() + ")");
     srb.setToggleGroup(rtg);
     srb.setUserData("Single");
     
-    RadioButton drb = new RadioButton("Double");
+    RadioButton drb = new RadioButton("Double ($" + Room.getDoublePrice() + ")");
     drb.setToggleGroup(rtg);
     drb.setUserData("Double");
     
@@ -99,7 +100,7 @@ public class ReserveRoomPsuedoDialog
 		dialogStage.initModality(Modality.APPLICATION_MODAL);
 		
 		dialogStage.setWidth(250);
-		dialogStage.setHeight(250);
+		dialogStage.setHeight(300);
 		
 		dialogStage.setScene(dialogScene);
 	}
@@ -127,6 +128,14 @@ public class ReserveRoomPsuedoDialog
 		}
 		else
 			cid = Date.from( cild.atTime(11, 0).atZone( ZoneId.systemDefault() ).toInstant() );
+		
+		if( cid.before( Calendar.getInstance().getTime() ) )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "Check In Date, Cannot Precede Current Date");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;	
+		}
 			
 		LocalDate cold = checkOutDatePicker.getValue();
 		
@@ -139,6 +148,22 @@ public class ReserveRoomPsuedoDialog
 		}
 		else
 			cod = Date.from( cold.atTime(15, 0).atZone( ZoneId.systemDefault() ).toInstant() );
+		
+		if( cod.before( Calendar.getInstance().getTime() ) )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "Check Out Date, Cannot Precede Current Date");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
+		
+		if( !cid.before(cod) )
+		{
+			var alert = new Alert(Alert.AlertType.ERROR, "The check in date must precede the check out date!!");
+			alert.initStyle(StageStyle.UNDECORATED);
+			alert.showAndWait();
+			return;
+		}
 			
 		okButtonClicked = true;
 		
