@@ -253,7 +253,10 @@ public class ReservationService
 			{
 				RO.get().cancel();
 				
-				hotelRepo.updateReservations(RO.get().getRoom());
+					// must get room from room map, because room from reservation has a null value for reservation list
+				Room rm = rooms.get( RO.get().getRoom().getRoomNumber() );
+				
+				hotelRepo.updateReservations(rm);
 					
 				return RO;
 			}
